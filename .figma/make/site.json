@@ -1,0 +1,10 @@
+{
+  "description": "This web application offers a dynamic and responsive user interface, designed for developers to streamline frontend development using React and Vite.",
+  "robots": {
+    "index": false
+  },
+  "accessibility": {
+    "addBypassLinks": false,
+    "ignoreReducedMotion": false
+  }
+}
