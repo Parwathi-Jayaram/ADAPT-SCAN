@@ -1,4 +1,4 @@
-const API_BASE = import.meta.env.DEV ? '/api' : 'http://localhost:8000'
+const API_BASE = import.meta.env.DEV ? '' : 'http://localhost:8000'
 
 export type SignalType = "RADAR" | "COMM" | "ECM" | "UNKNOWN" | "SILENT"
 export type Strategy = "RANDOM" | "ROUND_ROBIN" | "THREAT_PRIORITY" | "ADAPT_SCAN"

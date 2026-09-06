@@ -283,38 +283,6 @@ function getTopCandidates(regions: Region[], step: number): Candidate[] {
     .slice(0, 5)
 }
 
-function mapBackendState(state: BackendState): Region[] {
-  return state.regions.map((region, index) => ({
-    id: region.region_id,
-    freqMHz: 100 + index * 250,
-    bwMHz: 41,
-    signalStrength: region.existence,
-    threatLevel: region.threat_relevance,
-    uncertainty: region.uncertainty,
-    beliefProb: region.existence,
-    lastScanned: region.last_observed,
-    signalType: region.status === "detected" ? "RADAR" : "UNKNOWN",
-    active: region.status !== "silent",
-    priority: region.threat_relevance,
-  }))
-}
-
-function buildBackendRecord(state: BackendState): ScanRecord | null {
-  if (!state.decision) return null
-  return {
-    step: state.timestep,
-    regionId: state.decision.selected_action,
-    infoGain: state.decision.information_gain,
-    threatValue: state.decision.threat_score,
-    uncertainty: state.decision.uncertainty,
-    trackingUrgency: state.decision.tracking_value,
-    scanCost: state.decision.scan_cost,
-    detectedSignal: state.observation?.detected ?? false,
-    explanation: state.decision.reason,
-    strategy: "ADAPT_SCAN",
-  }
-}
-
 // ─── Scenario presets ─────────────────────────────────────────────────────────
 
 const SCENARIOS = [
@@ -1262,57 +1230,6 @@ function OverrideModal({ open, onClose, onConfirm, regions, aiRegion, c }: {
         </div>
       </div>
     </div>
-  )
-}
-
-// ─── Main App ─────────────────────────────────────────────────────────────────
-
-function AuthScreen({ onAuthenticated }: { onAuthenticated: (token: string) => void }) {
-  const [mode, setMode] = useState<"login" | "register">("login")
-  const [name, setName] = useState("")
-  const [email, setEmail] = useState("")
-  const [password, setPassword] = useState("")
-  const [error, setError] = useState("")
-  const [busy, setBusy] = useState(false)
-
-  async function submit(event: FormEvent) {
-    event.preventDefault()
-    setBusy(true)
-    setError("")
-    try {
-      const response = mode === "login"
-        ? await login(email, password)
-        : await register(name, email, password)
-      localStorage.setItem("adapt_scan_token", response.token)
-      onAuthenticated(response.token)
-    } catch (requestError) {
-      setError(requestError instanceof Error ? requestError.message : "Unable to connect to the backend.")
-    } finally {
-      setBusy(false)
-    }
-  }
-
-  return (
-    <main className="min-h-screen flex items-center justify-center bg-[#050d12] px-4 text-[#c8e6f0]">
-      <form onSubmit={submit} className="w-full max-w-md border border-[#1e3a50] bg-[#071018] p-6 shadow-xl">
-        <div className="mb-6">
-          <div className="font-mono text-lg font-bold tracking-widest text-[#00e57a]">ADAPT-SCAN</div>
-          <div className="mt-1 font-mono text-xs tracking-wider text-[#4a7a99]">BACKEND CONNECTION</div>
-        </div>
-        {mode === "register" && (
-          <input value={name} onChange={(event) => setName(event.target.value)} placeholder="Name" required className="mb-3 w-full border border-[#1e3a50] bg-[#040b10] p-3 font-mono text-sm outline-none" />
-        )}
-        <input value={email} onChange={(event) => setEmail(event.target.value)} type="email" placeholder="Email" required className="mb-3 w-full border border-[#1e3a50] bg-[#040b10] p-3 font-mono text-sm outline-none" />
-        <input value={password} onChange={(event) => setPassword(event.target.value)} type="password" placeholder="Password" minLength={6} required className="mb-3 w-full border border-[#1e3a50] bg-[#040b10] p-3 font-mono text-sm outline-none" />
-        {error && <div className="mb-3 border border-[#f87171] bg-[#1a0a00] p-3 font-mono text-xs text-[#f87171]">{error}</div>}
-        <button disabled={busy} className="w-full border border-[#00e57a] bg-[#00e57a22] p-3 font-mono text-sm font-bold text-[#00e57a] disabled:opacity-50">
-          {busy ? "CONNECTING..." : mode === "login" ? "LOGIN" : "CREATE ACCOUNT"}
-        </button>
-        <button type="button" onClick={() => { setMode(mode === "login" ? "register" : "login"); setError("") }} className="mt-4 w-full font-mono text-xs text-[#7ab8cc]">
-          {mode === "login" ? "Create a new account" : "Use an existing account"}
-        </button>
-      </form>
-    </main>
   )
 }
 
