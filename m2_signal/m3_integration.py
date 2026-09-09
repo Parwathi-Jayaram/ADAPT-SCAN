@@ -90,63 +90,218 @@ class M2M3Bridge:
     
     def scan_region(self, region_id: str) -> Dict[str, Any]:
         """
-        Scan a region using M3's simulator and process with M2.
+        Scan a region using M3's simulator and process the
+        actual M3 scan result with M2.
         """
+
         if self.m3_available and self.env is not None:
             try:
+                # M3 performs the actual scan
                 m3_obs, reward, done, info = self.env.step(region_id)
-                scan_result = info.get('scan_result')
-                
+
+                # Get the actual scan result produced by M3
+                scan_result = info.get("scan_result")
+
                 if scan_result:
                     scanner_result = {
                         "region_id": region_id,
-                        "signal_type": self._classify_signal(
-                            getattr(scan_result, 'strength', 0.5),
-                            getattr(scan_result, 'bandwidth', 0.3),
-                            getattr(scan_result, 'snr', 5.0)
+                        "detected": bool(
+                            scan_result.get("detected", False)
                         ),
-                        "scan_mode": "standard",
-                        "additional_cost": getattr(scan_result, 'scan_cost', 1.0)
+                        "strength": float(
+                            scan_result.get("strength", 0.0)
+                        ),
+                        "bandwidth": float(
+                            scan_result.get("bandwidth", 0.0)
+                        ),
+                        "snr": float(
+                            scan_result.get("snr", 0.0)
+                        ),
+                        "confidence": float(
+                            scan_result.get("confidence", 0.0)
+                        ),
+                        "noise_level": scan_result.get(
+                            "noise_level",
+                            "medium"
+                        ),
+                        "timestamp": float(
+                            scan_result.get(
+                                "timestamp",
+                                time.time()
+                            )
+                        ),
+                        "scan_cost": float(
+                            scan_result.get(
+                                "scan_cost",
+                                1.0
+                            )
+                        ),
+                        "signal_type": self._classify_signal(
+                            float(
+                                scan_result.get(
+                                    "strength",
+                                    0.0
+                                )
+                            ),
+                            float(
+                                scan_result.get(
+                                    "bandwidth",
+                                    0.0
+                                )
+                            ),
+                            float(
+                                scan_result.get(
+                                    "snr",
+                                    0.0
+                                )
+                            )
+                        ),
                     }
+
                 else:
-                    regions = m3_obs.get('regions', [])
-                    region_data = next((r for r in regions if r.get('region_id') == region_id), None)
-                    
+                    # Fallback if M3 does not provide scan_result
+                    regions = m3_obs.get("regions", [])
+
+                    region_data = next(
+                        (
+                            r for r in regions
+                            if r.get("region_id") == region_id
+                        ),
+                        None
+                    )
+
                     if region_data:
                         scanner_result = {
                             "region_id": region_id,
-                            "signal_type": self._classify_signal(
-                                region_data.get('strength', 0.5),
-                                region_data.get('bandwidth', 0.3),
-                                region_data.get('snr', 5.0)
+                            "detected": bool(
+                                region_data.get(
+                                    "detected",
+                                    False
+                                )
                             ),
-                            "scan_mode": "standard",
-                            "additional_cost": 1.0
+                            "strength": float(
+                                region_data.get(
+                                    "strength",
+                                    0.0
+                                )
+                            ),
+                            "bandwidth": float(
+                                region_data.get(
+                                    "bandwidth",
+                                    0.0
+                                )
+                            ),
+                            "snr": float(
+                                region_data.get(
+                                    "snr",
+                                    0.0
+                                )
+                            ),
+                            "confidence": float(
+                                region_data.get(
+                                    "confidence",
+                                    0.0
+                                )
+                            ),
+                            "noise_level": region_data.get(
+                                "noise_level",
+                                "medium"
+                            ),
+                            "timestamp": float(
+                                region_data.get(
+                                    "timestamp",
+                                    time.time()
+                                )
+                            ),
+                            "scan_cost": 1.0,
+                            "signal_type": self._classify_signal(
+                                float(
+                                    region_data.get(
+                                        "strength",
+                                        0.0
+                                    )
+                                ),
+                                float(
+                                    region_data.get(
+                                        "bandwidth",
+                                        0.0
+                                    )
+                                ),
+                                float(
+                                    region_data.get(
+                                        "snr",
+                                        0.0
+                                    )
+                                )
+                            ),
                         }
+
                     else:
-                        scanner_result = {"region_id": region_id}
-                
+                        scanner_result = {
+                            "region_id": region_id,
+                            "detected": False,
+                            "strength": 0.0,
+                            "bandwidth": 0.0,
+                            "snr": 0.0,
+                            "confidence": 0.0,
+                            "noise_level": "medium",
+                            "timestamp": time.time(),
+                            "scan_cost": 1.0,
+                            "signal_type": "intermittent",
+                        }
+
+                # Store M3 information for debugging/integration
                 self._last_m3_obs = m3_obs
                 self._last_m3_info = info
-                
+
             except Exception as e:
-                print(f"⚠️ M3 step failed for {region_id}: {e}")
-                scanner_result = {"region_id": region_id}
+                print(
+                    f"⚠️ M3 step failed for {region_id}: {e}"
+                )
+
+                scanner_result = {
+                    "region_id": region_id,
+                    "detected": False,
+                    "strength": 0.0,
+                    "bandwidth": 0.0,
+                    "snr": 0.0,
+                    "confidence": 0.0,
+                    "noise_level": "medium",
+                    "timestamp": time.time(),
+                    "scan_cost": 1.0,
+                    "signal_type": "intermittent",
+                }
+
         else:
-            scanner_result = {"region_id": region_id}
-        
+            scanner_result = {
+                "region_id": region_id,
+                "detected": False,
+                "strength": 0.0,
+                "bandwidth": 0.0,
+                "snr": 0.0,
+                "confidence": 0.0,
+                "noise_level": "medium",
+                "timestamp": time.time(),
+                "scan_cost": 1.0,
+                "signal_type": "intermittent",
+            }
+
+        # M2 processes the actual M3 observation
         return self.m2.generate_observation(scanner_result)
-    
     def _classify_signal(self, strength: float, bandwidth: float, snr: float) -> str:
         """Classify signal type based on raw parameters."""
+
         if strength > 0.7 and snr > 10:
-            return 'strong_radar'
+            return "continuous"
+
         elif strength > 0.4 and snr > 5:
-            return 'weak_radar'
+            return "changing-strength"
+
         elif bandwidth > 0.5:
-            return 'wideband_comms'
+            return "noisy"
+
         else:
-            return 'unknown'
+            return "intermittent"
     
     def process_raw_scan(self, scan_result, region_id: str) -> Dict[str, Any]:
         """Process a raw ScanResult object from M3 directly."""
@@ -181,31 +336,59 @@ class M2M3Bridge:
 # CONVENIENCE FUNCTIONS
 # ============================================
 
-def scan(region_id: str, 
-         noise_level: str = "medium",
-         seed: Optional[int] = 42,
-         use_real_data: bool = False) -> Dict[str, Any]:
-    """Scan a region and get processed observation."""
+def scan(
+    region_id: str,
+    noise_level: str = "medium",
+    seed: Optional[int] = 42,
+    use_real_data: bool = False
+) -> Dict[str, Any]:
+    """
+    Scan one region using a fresh M3 scenario
+    and process the result through M2.
+    """
+
+    actual_seed = seed if seed is not None else 42
+
     bridge = M2M3Bridge(
         noise_level=noise_level,
-        seed=seed if seed is not None else 42,
+        seed=actual_seed,
         use_real_data=use_real_data
     )
+
+    # Initialize the M3 scenario before scanning.
+    bridge.reset_scenario(
+        scenario_id="S1",
+        seed=actual_seed
+    )
+
     return bridge.scan_region(region_id)
 
+def scan_all(
+    region_ids: List[str],
+    noise_level: str = "medium",
+    seed: Optional[int] = 42,
+    use_real_data: bool = False
+) -> List[Dict[str, Any]]:
+    """
+    Scan multiple regions using the same M3 scenario
+    and process all results through M2.
+    """
 
-def scan_all(region_ids: List[str],
-             noise_level: str = "medium",
-             seed: Optional[int] = 42,
-             use_real_data: bool = False) -> List[Dict[str, Any]]:
-    """Scan multiple regions."""
+    actual_seed = seed if seed is not None else 42
+
     bridge = M2M3Bridge(
         noise_level=noise_level,
-        seed=seed if seed is not None else 42,
+        seed=actual_seed,
         use_real_data=use_real_data
     )
-    return bridge.scan_multiple_regions(region_ids)
 
+    # Initialize the M3 scenario once.
+    bridge.reset_scenario(
+        scenario_id="S1",
+        seed=actual_seed
+    )
+
+    return bridge.scan_multiple_regions(region_ids)
 
 # ============================================
 # TEST

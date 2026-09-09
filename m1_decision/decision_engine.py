@@ -1,5 +1,5 @@
-from core.action import ScanAction
-from core.decision import Decision
+from .core.action import ScanAction
+from .core.decision import Decision
 
 
 class DecisionEngine:
@@ -136,13 +136,23 @@ class DecisionEngine:
                 uncertainty
             )
 
+            observation_data = state.observations.get(region_id)
+
+            if observation_data is None:
+                last_observed = None
+            else:
+                last_observed = observation_data.get(
+                    "last_observed",
+                    state.time_step
+                )
+
             tracking_value = self.calculate_tracking_value(
-                state.observations.get(region_id, {}).get("last_observed"),
+                last_observed,
                 state.time_step,
             )
 
             scan_cost = self.default_scan_cost
-
+            
             # Do not choose a scan that cannot be afforded.
             if scan_cost > state.remaining_budget:
                 continue
@@ -155,6 +165,17 @@ class DecisionEngine:
                 scan_cost=scan_cost,
             )
 
+            # Encourage exploration of regions that have not
+            # been scanned yet.
+            if region_id not in state.observations:
+                utility += 0.10
+
+            # Prioritize regions where M2 detected a signal.
+            observation = state.observations.get(region_id)
+
+            if observation is not None:
+                if observation.get("detected", False):
+                    utility += 0.30
             decision = Decision(
                 action=ScanAction(region_id),
                 utility=utility,

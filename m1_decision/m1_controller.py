@@ -1,7 +1,8 @@
-from core.belief import BeliefState
-from core.state import DecisionState
-from intelligence.belief_updater import BeliefUpdater
-from decision_engine import DecisionEngine
+from .core.belief import BeliefState
+from .core.state import DecisionState
+from .core.observation import Observation
+from .intelligence.belief_updater import BeliefUpdater
+from .decision_engine import DecisionEngine
 
 
 class M1Controller:
@@ -47,6 +48,35 @@ class M1Controller:
             observation,
             self.belief_state,
         )
+
+    def process_observation_dict(self, data):
+        """
+        Convert an M2 processed observation dictionary into
+        an M1 Observation object and update M1's belief.
+
+        Parameters
+        ----------
+        data:
+            Processed observation dictionary received from M2.
+
+        Returns
+        -------
+        float
+            Updated belief probability.
+        """
+
+        observation = Observation(
+            region_id=data["region_id"],
+            detected=data["detected"],
+            strength=data.get("strength"),
+            bandwidth=data.get("bandwidth"),
+            snr=data.get("snr"),
+            confidence=data.get("confidence"),
+            features=data.get("features"),
+            timestamp=data.get("timestamp"),
+        )
+
+        return self.process_observation(observation)
 
     def choose_next_scan(
         self,
