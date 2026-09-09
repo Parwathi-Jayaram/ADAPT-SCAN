@@ -1,229 +1,246 @@
-# m2_interface.py
-# Place this in: C:\Users\Acer\Desktop\m2_signal\m2_interface.py
-
 """
 MEMBER 2 - REAL INTEGRATION INTERFACE
 =====================================
 This is the ACTUAL interface that M1 and M3 will use.
 
-M2 expects from M3:
-    scanner_result = {
-        "region_id": "R7",
-        "signal_type": "continuous",     # Optional, from M3
-        "scan_mode": "standard",          # Optional
-        "additional_cost": 0.0           # Optional
-    }
-
-M2 provides to M1:
-    processed_observation = {
-        "region_id": "R7",
-        "detected": True,
-        "strength": 0.63,
-        "bandwidth": 0.41,
-        "snr": 7.2,
-        "confidence": 0.72,
-        "features": [],
-        "timestamp": 1234567890.0
-    }
-
-IMPORTANT: Ground truth is NEVER included in the observation sent to M1!
+VERSION: 1.1.0
+STATUS: ✅ Production Ready
 """
 
-from typing import Dict, Any, Optional, List
+from typing import Dict, Any, Optional, List, Union
 import time
-import random
 
-# Import M2's internal modules
-from signal_generator import generate_signal
-from noise_model import get_noise_config, apply_noise
-from observation import ObservationModel, Observation
-from feature_extractor import FeatureExtractor
+# Conditional imports - works both as package and when run directly
+try:
+    from .signal_generator import generate_signal
+    from .noise_model import get_noise_config, apply_noise
+    from .observation import ObservationModel, Observation
+    from .feature_extractor import FeatureExtractor
+except ImportError:
+    from signal_generator import generate_signal
+    from noise_model import get_noise_config, apply_noise
+    from observation import ObservationModel, Observation
+    from feature_extractor import FeatureExtractor
 
+
+# ============================================
+# FEATURE DEFINITIONS
+# ============================================
+
+FEATURE_MEANINGS = {
+    0: {
+        "name": "detection_confidence",
+        "description": "How confident we are in detection",
+        "range": "0.0-1.0",
+        "higher_is": "more confident"
+    },
+    1: {
+        "name": "strength_estimate",
+        "description": "Estimated signal strength",
+        "range": "0.0-1.0",
+        "higher_is": "stronger signal"
+    },
+    2: {
+        "name": "bandwidth_estimate",
+        "description": "Estimated signal bandwidth",
+        "range": "0.0-1.0",
+        "higher_is": "wider bandwidth"
+    },
+    3: {
+        "name": "activity_estimate",
+        "description": "Estimated signal activity level",
+        "range": "0.0-1.0",
+        "higher_is": "more active"
+    },
+    4: {
+        "name": "uncertainty",
+        "description": "How uncertain we are about this region",
+        "range": "0.0-1.0",
+        "higher_is": "more uncertain (need to scan)"
+    },
+    5: {
+        "name": "reliability",
+        "description": "How reliable are these features",
+        "range": "0.0-1.0",
+        "higher_is": "more reliable"
+    },
+    6: {
+        "name": "stability",
+        "description": "How stable the signal is over time",
+        "range": "0.0-1.0",
+        "higher_is": "more stable"
+    },
+    7: {
+        "name": "change_rate",
+        "description": "Rate of change in the signal",
+        "range": "0.0-1.0",
+        "higher_is": "changing faster"
+    }
+}
+
+
+# ============================================
+# VALIDATION FUNCTIONS
+# ============================================
+
+def validate_scanner_result(scanner_result: Dict[str, Any]) -> None:
+    """Validate scanner_result before processing."""
+    if not isinstance(scanner_result, dict):
+        raise TypeError(
+            f"scanner_result must be dict, got {type(scanner_result).__name__}"
+        )
+    
+    if "region_id" not in scanner_result:
+        raise ValueError("scanner_result must contain 'region_id'")
+    
+    if not isinstance(scanner_result["region_id"], str):
+        raise TypeError(
+            f"region_id must be str, got {type(scanner_result['region_id']).__name__}"
+        )
+    
+    if "signal_type" in scanner_result:
+        valid_types = [
+            "continuous", "intermittent", "appearing", 
+            "disappearing", "changing-strength", "noisy", "overlapping"
+        ]
+        if scanner_result["signal_type"] not in valid_types:
+            raise ValueError(
+                f"signal_type must be one of {valid_types}, "
+                f"got '{scanner_result['signal_type']}'"
+            )
+    
+    if "scan_mode" in scanner_result:
+        valid_modes = ["standard", "high_resolution", "quick"]
+        if scanner_result["scan_mode"] not in valid_modes:
+            raise ValueError(
+                f"scan_mode must be one of {valid_modes}, "
+                f"got '{scanner_result['scan_mode']}'"
+            )
+    
+    if "additional_cost" in scanner_result:
+        if not isinstance(scanner_result["additional_cost"], (int, float)):
+            raise TypeError(
+                f"additional_cost must be number, "
+                f"got {type(scanner_result['additional_cost']).__name__}"
+            )
+        if scanner_result["additional_cost"] < 0:
+            raise ValueError("additional_cost cannot be negative")
+
+
+# ============================================
+# MAIN INTERFACE CLASS
+# ============================================
 
 class M2Interface:
-    """
-    REAL Interface for M2 - Signal Processing Module.
-    
-    This is what M3 and M1 actually use in production.
-    
-    M3 calls: generate_observation(scanner_result)
-    M1 calls: get_processed_observation(region_id)  # Or receives via M3
-    """
+    """REAL Interface for M2 - Signal Processing Module."""
     
     def __init__(self, 
                  noise_level: str = "medium",
                  seed: Optional[int] = None,
-                 history_length: int = 10):
-        """
-        Initialize M2 Interface.
-        
-        Args:
-            noise_level: "low", "medium", or "high"
-            seed: For reproducible results
-            history_length: How many observations to keep in history
-        """
+                 history_length: int = 10,
+                 detection_threshold: float = 0.3):
         self.noise_level = noise_level
         self.seed = seed
         self.history_length = history_length
+        self.detection_threshold = detection_threshold
         
-        # Internal components
+        if not 0.05 <= detection_threshold <= 0.8:
+            raise ValueError(
+                f"detection_threshold must be between 0.05 and 0.8, "
+                f"got {detection_threshold}"
+            )
+        
         self._observation_model = ObservationModel(noise_level, seed)
         self._feature_extractor = FeatureExtractor(history_length)
         
-        # Track state for each region
         self._region_histories = {}
         self._last_observations = {}
     
     def generate_observation(self, scanner_result: Dict[str, Any]) -> Dict[str, Any]:
-        """
-        MAIN FUNCTION: M3 calls this with scanner result.
-        
-        This is the ONLY function M3 needs to call.
-        
-        Args:
-            scanner_result: Dict from M3 containing:
-                {
-                    "region_id": "R7",          # REQUIRED
-                    "signal_type": "continuous", # OPTIONAL (default: "continuous")
-                    "scan_mode": "standard",     # OPTIONAL
-                    "additional_cost": 0.0       # OPTIONAL
-                }
-        
-        Returns:
-            Processed observation for M1:
-            {
-                "region_id": "R7",
-                "detected": True,
-                "strength": 0.63,
-                "bandwidth": 0.41,
-                "snr": 7.2,
-                "confidence": 0.72,
-                "features": [],
-                "timestamp": 1234567890.0
-            }
-        
-        Raises:
-            ValueError: If region_id is missing
-        """
-        # Validate input
-        if "region_id" not in scanner_result:
-            raise ValueError("M2: scanner_result must contain 'region_id'")
+        """Generate observation with full validation."""
+        validate_scanner_result(scanner_result)
         
         region_id = scanner_result["region_id"]
         signal_type = scanner_result.get("signal_type", "continuous")
         scan_mode = scanner_result.get("scan_mode", "standard")
         additional_cost = scanner_result.get("additional_cost", 0.0)
         
-        # Step 1: Generate ground truth (HIDDEN from M1)
         ground_truth = generate_signal(
             region_id=region_id,
             signal_type=signal_type,
             seed=self.seed
         )
         
-        # Step 2: Add any scan mode effects
         if scan_mode == "high_resolution":
-            # Higher resolution = more expensive but slightly better detection
             ground_truth["strength"] = min(1.0, ground_truth["strength"] * 1.1)
             additional_cost += 0.5
         elif scan_mode == "quick":
-            # Quick scan = cheaper but less reliable
             ground_truth["strength"] = max(0.0, ground_truth["strength"] * 0.9)
             additional_cost -= 0.3
         
-        # Step 3: Create scanner action dict for observation model
         scanner_action = {
             "region_id": region_id,
             "scan_mode": scan_mode,
             "additional_cost": additional_cost
         }
         
-        # Step 4: Generate observation (noisy)
         observation = self._observation_model.observe(
             ground_truth=ground_truth,
             scanner_action=scanner_action
         )
         
-        # Step 5: Extract features for M1
         features = self._feature_extractor.extract(observation)
         
-        # Step 6: Build the processed observation for M1
+        confidence = observation.confidence
+        if confidence >= 0.9:
+            confidence_level = "VERY_HIGH"
+        elif confidence >= 0.7:
+            confidence_level = "HIGH"
+        elif confidence >= 0.5:
+            confidence_level = "MEDIUM"
+        elif confidence >= 0.3:
+            confidence_level = "LOW"
+        else:
+            confidence_level = "VERY_LOW"
+        
         processed_observation = {
             "region_id": region_id,
-            "detected": observation.detected,
-            "strength": observation.strength,
-            "bandwidth": observation.bandwidth,
-            "snr": observation.snr,
-            "confidence": observation.confidence,
+            "detected": bool(observation.detected),
+            "strength": float(observation.strength),
+            "bandwidth": float(observation.bandwidth),
+            "snr": float(observation.snr),
+            "confidence": float(observation.confidence),
+            "confidence_level": confidence_level,
             "features": self._extract_features_for_m1(features),
-            "timestamp": observation.timestamp
+            "feature_meaning": FEATURE_MEANINGS,
+            "timestamp": float(observation.timestamp)
         }
         
-        # Store in history
         self._region_histories.setdefault(region_id, []).append(processed_observation)
         self._last_observations[region_id] = processed_observation
         
         return processed_observation
     
     def _extract_features_for_m1(self, features) -> List[float]:
-        """
-        Extract numerical features for M1's decision engine.
-        
-        Returns a list of feature values that M1 can use.
-        """
-        # Convert features to simple list of numbers
-        feature_list = [
-            features.detection_confidence,
-            features.strength_estimate,
-            features.bandwidth_estimate,
-            features.activity_estimate,
-            features.uncertainty,
-            features.reliability,
-            features.temporal_features.get('stability', 1.0),
-            features.temporal_features.get('change_rate', 0.0)
+        """Extract numerical features for M1's decision engine."""
+        return [
+            float(features.detection_confidence),
+            float(features.strength_estimate),
+            float(features.bandwidth_estimate),
+            float(features.activity_estimate),
+            float(features.uncertainty),
+            float(features.reliability),
+            float(features.temporal_features.get('stability', 1.0)),
+            float(features.temporal_features.get('change_rate', 0.0))
         ]
-        return feature_list
     
     def get_processed_observation(self, region_id: str) -> Optional[Dict[str, Any]]:
-        """
-        Get the latest processed observation for a region.
-        
-        This is what M1 can call directly if needed.
-        
-        Args:
-            region_id: Region to get observation for
-            
-        Returns:
-            Latest processed observation or None if not found
-        """
         return self._last_observations.get(region_id)
     
     def get_region_history(self, region_id: str) -> List[Dict[str, Any]]:
-        """
-        Get full history for a region.
-        
-        Useful for M1's temporal analysis.
-        
-        Args:
-            region_id: Region to get history for
-            
-        Returns:
-            List of historical observations
-        """
         return self._region_histories.get(region_id, [])
     
     def handle_no_signal(self, region_id: str) -> Dict[str, Any]:
-        """
-        Handle cases where no signal is detected.
-        
-        This ensures the system doesn't crash on missing observations.
-        
-        Args:
-            region_id: Region with no signal
-            
-        Returns:
-            Processed observation indicating no detection
-        """
         return {
             "region_id": region_id,
             "detected": False,
@@ -231,17 +248,13 @@ class M2Interface:
             "bandwidth": 0.0,
             "snr": 0.0,
             "confidence": 0.0,
-            "features": [0.0] * 8,  # Empty features
-            "timestamp": time.time()
+            "confidence_level": "VERY_LOW",
+            "features": [0.0] * 8,
+            "feature_meaning": FEATURE_MEANINGS,
+            "timestamp": float(time.time())
         }
     
     def reset_region(self, region_id: Optional[str] = None):
-        """
-        Reset history for a region or all regions.
-        
-        Args:
-            region_id: Specific region to reset, or None for all
-        """
         if region_id:
             self._region_histories[region_id] = []
             self._last_observations.pop(region_id, None)
@@ -250,105 +263,68 @@ class M2Interface:
             self._region_histories = {}
             self._last_observations = {}
             self._feature_extractor.reset()
+    
+    def get_detection_threshold(self) -> float:
+        return float(self.detection_threshold)
+    
+    def set_detection_threshold(self, threshold: float) -> None:
+        if not 0.05 <= threshold <= 0.8:
+            raise ValueError(f"threshold must be between 0.05 and 0.8, got {threshold}")
+        self.detection_threshold = threshold
+    
+    def get_confidence_interpretation(self, confidence: float) -> str:
+        if confidence >= 0.9:
+            return "VERY_HIGH - Trust this detection"
+        elif confidence >= 0.7:
+            return "HIGH - Likely correct"
+        elif confidence >= 0.5:
+            return "MEDIUM - Consider with caution"
+        elif confidence >= 0.3:
+            return "LOW - Probably uncertain"
+        else:
+            return "VERY_LOW - Don't trust"
+    
+    def get_stats(self) -> Dict[str, Any]:
+        return {
+            "noise_level": self.noise_level,
+            "seed": self.seed,
+            "history_length": self.history_length,
+            "detection_threshold": self.detection_threshold,
+            "regions_tracked": len(self._region_histories),
+            "total_observations": sum(len(h) for h in self._region_histories.values())
+        }
 
 
 # ============================================
-# SIMPLE HELPER FUNCTIONS FOR M3
+# CONVENIENCE FUNCTION FOR M3
 # ============================================
 
 def generate_observation(scanner_result: Dict[str, Any]) -> Dict[str, Any]:
-    """
-    Convenience function for M3.
-    
-    This is the SIMPLEST interface M3 can use.
-    
-    Example:
-        result = generate_observation({"region_id": "R7"})
-    
-    Args:
-        scanner_result: Dict with at least "region_id"
-        
-    Returns:
-        Processed observation for M1
-    """
+    """Convenience function for M3."""
     interface = M2Interface(noise_level="medium", seed=42)
     return interface.generate_observation(scanner_result)
 
 
-# ============================================
-# PRODUCTION TEST - This is NOT a unit test
-# This demonstrates how M3 and M1 will use this
-# ============================================
-
 if __name__ == "__main__":
     print("=" * 60)
-    print("M2 INTERFACE - PRODUCTION READY")
+    print("M2 INTERFACE - PRODUCTION READY (v1.1.0)")
     print("=" * 60)
     
-    # Initialize M2 interface
     m2 = M2Interface(noise_level="medium", seed=42)
     
-    print("\n1. M3 calls: generate_observation()")
-    print("-" * 40)
-    
-    # Simulate M3 calling with scanner result
-    scanner_result = {
+    observation = m2.generate_observation({
         "region_id": "R7",
         "signal_type": "continuous",
         "scan_mode": "standard"
-    }
+    })
     
-    print(f"   M3 input: {scanner_result}")
-    
-    # M2 processes and returns observation
-    observation = m2.generate_observation(scanner_result)
-    
-    print(f"\n   M2 output to M1:")
+    print("\nM2 output to M1:")
     for key, value in observation.items():
-        if key != "features":
-            print(f"   {key}: {value}")
+        if key == "features":
+            print(f"   features: [{len(value)} features]")
+        elif key == "feature_meaning":
+            print(f"   feature_meaning: {len(value)} meanings defined")
         else:
-            print(f"   {key}: [{len(value)} features]")
+            print(f"   {key}: {value}")
     
-    print("\n2. M1 receives the observation:")
-    print("-" * 40)
-    print(f"   Region: {observation['region_id']}")
-    print(f"   Detected: {observation['detected']}")
-    print(f"   Strength: {observation['strength']:.3f}")
-    print(f"   Confidence: {observation['confidence']:.3f}")
-    print(f"   SNR: {observation['snr']:.2f}")
-    
-    print("\n3. Testing multiple regions:")
-    print("-" * 40)
-    
-    regions = ["R1", "R2", "R3", "R4", "R5"]
-    for region in regions:
-        obs = m2.generate_observation({
-            "region_id": region,
-            "signal_type": "continuous"
-        })
-        print(f"   {region}: detected={obs['detected']}, "
-              f"strength={obs['strength']:.3f}, "
-              f"confidence={obs['confidence']:.3f}")
-    
-    print("\n4. Testing no-signal case:")
-    print("-" * 40)
-    
-    # Simulate no signal
-    no_signal = m2.handle_no_signal("R99")
-    print(f"   No signal in R99:")
-    print(f"   Detected: {no_signal['detected']}")
-    print(f"   Confidence: {no_signal['confidence']}")
-    
-    print("\n5. Getting region history:")
-    print("-" * 40)
-    
-    history = m2.get_region_history("R7")
-    print(f"   R7 has {len(history)} observations in history")
-    
-    print("\n" + "=" * 60)
-    print("✅ M2 INTERFACE IS PRODUCTION READY!")
-    print("   M3 can call: generate_observation(scanner_result)")
-    print("   M1 receives: processed_observation")
-    print("   Ground truth is NEVER exposed to M1")
-    print("=" * 60)
+    print("\n✅ M2 INTERFACE IS PRODUCTION READY!")

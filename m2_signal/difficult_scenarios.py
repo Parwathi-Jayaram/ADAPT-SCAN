@@ -18,10 +18,16 @@ from typing import Dict, Any, List, Optional, Tuple
 from dataclasses import dataclass
 import random
 
-from signal_generator import generate_signal
-from observation import ObservationModel
-from feature_extractor import FeatureExtractor
-from pipeline import SignalPipeline, PipelineOutput
+try:
+    from .signal_generator import generate_signal
+    from .observation import ObservationModel
+    from .feature_extractor import FeatureExtractor
+    from .pipeline import SignalPipeline, PipelineOutput
+except ImportError:
+    from signal_generator import generate_signal
+    from observation import ObservationModel
+    from feature_extractor import FeatureExtractor
+    from pipeline import SignalPipeline, PipelineOutput
 
 
 @dataclass

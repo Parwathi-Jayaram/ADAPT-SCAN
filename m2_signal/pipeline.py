@@ -15,10 +15,16 @@ from dataclasses import dataclass
 import time
 import json
 
-from signal_generator import generate_signal
-from noise_model import get_noise_config, apply_noise
-from observation import ObservationModel, Observation, create_observation
-from feature_extractor import FeatureExtractor, ExtractedFeatures, extract_features
+try:
+    from .signal_generator import generate_signal
+    from .noise_model import get_noise_config, apply_noise
+    from .observation import ObservationModel, Observation, create_observation
+    from .feature_extractor import FeatureExtractor, ExtractedFeatures, extract_features
+except ImportError:
+    from signal_generator import generate_signal
+    from noise_model import get_noise_config, apply_noise
+    from observation import ObservationModel, Observation, create_observation
+    from feature_extractor import FeatureExtractor, ExtractedFeatures, extract_features
 
 
 @dataclass

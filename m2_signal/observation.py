@@ -1,6 +1,3 @@
-# observation.py - COMPLETE CORRECTED VERSION
-# Place this in: C:\Users\Acer\Desktop\m2_signal\observation.py
-
 """
 observation.py - Observation Model for Member 2
 
@@ -14,7 +11,11 @@ import time
 from typing import Dict, Any, Optional, List
 from dataclasses import dataclass, asdict
 
-from noise_model import get_noise_config, apply_noise
+# Conditional import - works both as package and when run directly
+try:
+    from .noise_model import get_noise_config, apply_noise
+except ImportError:
+    from noise_model import get_noise_config, apply_noise
 
 
 @dataclass
@@ -158,12 +159,21 @@ class ObservationModel:
             observation_id=f"obs_{timestamp}_{region_id}"
         )
     
-    def batch_observe(self, ground_truths: List[Dict[str, Any]],
-                      scanner_actions: Optional[List[Dict[str, Any]]] = None,
-                      timestamp: Optional[float] = None) -> List[Observation]:
-        """Generate observations for multiple ground truths."""
+    def batch_observe(self, 
+                  ground_truths: List[Dict[str, Any]],
+                  scanner_actions: Optional[List[Optional[Dict[str, Any]]]] = None,
+                  timestamp: Optional[float] = None) -> List[Observation]:
+        """
+        Generate observations for multiple ground truths.
+        
+        Args:
+            ground_truths: List of ground truth dictionaries
+            scanner_actions: List of scanner actions (or None for each)
+            timestamp: Optional timestamp for all observations
+        """
+        
         if scanner_actions is None:
-            scanner_actions = [None] * len(ground_truths)
+                scanner_actions = [None for _ in ground_truths]
         
         observations = []
         for gt, action in zip(ground_truths, scanner_actions):
@@ -191,7 +201,11 @@ def create_observation(ground_truth: Dict[str, Any],
 
 
 if __name__ == "__main__":
-    from signal_generator import generate_signal
+    # Conditional import for signal_generator when running directly
+    try:
+        from .signal_generator import generate_signal
+    except ImportError:
+        from signal_generator import generate_signal
     
     print("=" * 60)
     print("OBSERVATION MODEL TEST")
