@@ -1,4 +1,6 @@
-const API_BASE = import.meta.env.DEV ? '/api' : 'http://localhost:8000'
+const API_BASE = import.meta.env.DEV
+  ? "http://localhost:5000"
+  : "http://localhost:5000"
 
 export type SignalType = "RADAR" | "COMM" | "ECM" | "UNKNOWN" | "SILENT"
 export type Strategy = "RANDOM" | "ROUND_ROBIN" | "THREAT_PRIORITY" | "ADAPT_SCAN"
@@ -151,10 +153,18 @@ async function get(path: string) {
 }
 
 export const api = {
-  async reset(data: { scenario: string; seed?: number; strategy: string; num_regions: number }): Promise<ResetResponse> {
+  async reset(data: {
+    scenario: string
+    seed?: number
+    strategy: string
+    num_regions: number
+  }): Promise<ResetResponse> {
     return post("/api/simulation/reset", data)
   },
-  async step(data: { session_id: string; override_region_id?: string }): Promise<StepResponse> {
+  async step(data: {
+    session_id: string
+    override_region_id?: string
+  }): Promise<StepResponse> {
     return post("/api/simulation/step", data)
   },
   async getRegions(session_id: string): Promise<{ regions: Region[] }> {

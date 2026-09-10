@@ -447,7 +447,7 @@ def simulation_step(req: SimulationStepRequest):
             "regionId": action_region,
             "label": f"{'Operator override' if is_override else 'AI selected'} {action_region} — {'HIT' if detected else 'NIL'}",
             "detected": detected,
-            "record": record.model_dump(),
+            "record": record.model_dump(by_alias=True),
         })
         session.event_id_counter += 1
 
@@ -489,13 +489,12 @@ def simulation_step(req: SimulationStepRequest):
         "step": env.timestep,
         "done": done,
         "observation_state": obs_state.model_dump(by_alias=True),
-        "decision": decision.model_dump() if decision else None,
+        "decision": decision.model_dump(by_alias=True) if decision else None,
         "scan_result": scan_result,
         "scan_delta": scan_delta.model_dump(by_alias=True) if scan_delta else None,
-        "scan_record": record.model_dump() if record else None,
-        "candidates": [c.model_dump() for c in candidates],
-        "belief_state": new_beliefs,
-        "history": [h.model_dump() for h in session.history],
+        "scan_record": record.model_dump(by_alias=True) if record else None,
+        "candidates": [c.model_dump(by_alias=True) for c in candidates],
+        "history": [h.model_dump(by_alias=True) for h in session.history],
         "decision_events": session.decision_events,
         "metrics": {
             "detection_rate": sum(1 for h in session.history if h.detected_signal) / max(len(session.history), 1),
@@ -538,7 +537,7 @@ def _build_done_response(session: Session) -> Dict[str, Any]:
         "scan_record": None,
         "candidates": [],
         "belief_state": {rid: controller.belief_state.get_probability(rid) for rid in [f"R{i}" for i in range(1, env.num_regions + 1)]},
-        "history": [h.model_dump() for h in session.history],
+        "history": [h.model_dump(by_alias=True) for h in session.history],
         "decision_events": session.decision_events,
         "metrics": {
             "detection_rate": sum(1 for h in session.history if h.detected_signal) / max(len(session.history), 1),

@@ -26,47 +26,55 @@ class RegionState(BaseModel):
 
 
 class ScanDelta(BaseModel):
-    region_id: str
-    belief_before: float
-    belief_after: float
-    unc_before: float
-    unc_after: float
-    status_before: str
-    status_after: str
+    model_config = ConfigDict(populate_by_name=True)
+
+    region_id: str = Field(alias="regionId")
+    belief_before: float = Field(alias="beliefBefore")
+    belief_after: float = Field(alias="beliefAfter")
+    unc_before: float = Field(alias="uncBefore")
+    unc_after: float = Field(alias="uncAfter")
+    status_before: str = Field(alias="statusBefore")
+    status_after: str = Field(alias="statusAfter")
     detected: bool
 
 
 class ScanRecord(BaseModel):
+    model_config = ConfigDict(populate_by_name=True)
+
     step: int
-    region_id: str
-    info_gain: float
-    threat_value: float
+    region_id: str = Field(alias="regionId")
+    info_gain: float = Field(alias="infoGain")
+    threat_value: float = Field(alias="threatValue")
     uncertainty: float
-    tracking_urgency: float
-    scan_cost: float
-    detected_signal: bool
+    tracking_urgency: float = Field(alias="trackingUrgency")
+    scan_cost: float = Field(alias="scanCost")
+    detected_signal: bool = Field(alias="detectedSignal")
     explanation: str
     strategy: str
 
 
 class DecisionResponse(BaseModel):
-    region_id: str
+    model_config = ConfigDict(populate_by_name=True)
+
+    region_id: str = Field(alias="regionId")
     utility: float
-    information_gain: float
-    threat_score: float
+    information_gain: float = Field(alias="infoGain")
+    threat_score: float = Field(alias="threatScore")
     uncertainty: float
-    tracking_value: float
-    scan_cost: float
+    tracking_value: float = Field(alias="trackingValue")
+    scan_cost: float = Field(alias="scanCost")
     reason: str
 
 
 class CandidateRank(BaseModel):
+    model_config = ConfigDict(populate_by_name=True)
+
     id: str
     utility: float
-    info_gain: float
-    threat_score: float
-    tracking_value: float
-    scan_cost: float
+    info_gain: float = Field(alias="infoGain")
+    threat_score: float = Field(alias="threatScore")
+    tracking_value: float = Field(alias="trackingValue")
+    scan_cost: float = Field(alias="scanCost")
 
 
 class ObservationState(BaseModel):
@@ -74,10 +82,10 @@ class ObservationState(BaseModel):
 
     regions: List[RegionState]
     timestep: int
-    budget_remaining: float
-    budget_total: float
-    budget_remaining_frac: float
-    current_scan: Optional[str]
+    budget_remaining: float = Field(alias="budget_remaining")
+    budget_total: float = Field(alias="budget_total")
+    budget_remaining_frac: float = Field(alias="budget_remaining_frac")
+    current_scan: Optional[str] = Field(default=None, alias="current_scan")
     scenario: str
     intelligence: Dict[str, int]
 
