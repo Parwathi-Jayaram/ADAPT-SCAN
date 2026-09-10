@@ -4,12 +4,10 @@ import { protect } from '../middleware/authMiddleware.js'
 
 const router = express.Router()
 
-router.use(protect)
-
-router.get('/sessions', getMySessions)
-router.post('/sessions', createSession)
-router.get('/sessions/:id', getSessionById)
-router.put('/sessions/:id', updateSession)
-router.post('/sessions/:id/results', addSimulationResult)
+router.get('/sessions', protect, getMySessions)
+router.post('/sessions', protect, createSession)
+router.get('/sessions/:id', protect, getSessionById)
+router.put('/sessions/:id', protect, updateSession)
+router.post('/sessions/:id/results', protect, addSimulationResult)
 
 export default router
