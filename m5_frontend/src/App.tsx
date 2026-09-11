@@ -96,7 +96,10 @@ type Palette = typeof DARK
 
 // ─── Translations ─────────────────────────────────────────────────────────────
 
-type TKey = "appTitle" | "appSubtitle" | "step" | "strategy" | "budget" | "pause" | "run" | "currentIntel" | "detected" | "highPriority" | "uncertain" | "budgetUsed" | "scanning" | "spectrumEnv" | "beliefState" | "scanTimeline" | "awaiting" | "whyScan" | "startSim" | "controls" | "comparison" | "about" | "emitters" | "noiseLevel" | "scanBudget" | "speedMs" | "dynamicEvents" | "on" | "off" | "scenario" | "runStrategy" | "strategyComparison" | "currentMetrics" | "scansExecuted" | "signalsDetected" | "avgInfoGain" | "avgThreatVal" | "detectionRate" | "infoGain" | "threatValue" | "trackUrgency" | "scanCost" | "aiAssistant" | "aiPlaceholder" | "send" | "aiGreet" | "langLabel" | "footerLeft" | "live" | "paused" | "simNote"
+type TKey = "appTitle" | "appSubtitle" | "step" | "strategy" | "budget" | "pause" | "run" | "currentIntel" | "detected" | "highPriority" | "uncertain" | "budgetUsed" | "scanning" | "spectrumEnv" | "beliefState" | "scanTimeline" | "awaiting" | "whyScan" | "startSim" | "controls" | "comparison" | "about" | "emitters" | "noiseLevel" | "scanBudget" | "speedMs" | "dynamicEvents" | "on" | "off" | "scenario" | "runStrategy" | "strategyComparison" | "currentMetrics" | "scansExecuted" | "signalsDetected" | "avgInfoGain" | "avgThreatVal" | "detectionRate" | "infoGain" | "threatValue" | "trackUrgency" | "scanCost" | "aiAssistant" | "aiPlaceholder" | "send" | "aiGreet"   | "langLabel" | "footerLeft" | "live" | "paused" | "simNote"
+  | "navOverview" | "navEmitters" | "navDecisions" | "navAnalytics" | "navBenchmarks" | "navSettings"
+  | "simulationLabel" | "versionLabel"
+  | "pageEmitters" | "pageDecisions" | "pageAnalytics" | "pageBenchmarks" | "pageSettings"
 
 const TRANSLATIONS: Record<Lang, Record<TKey, string>> = {
   en: {
@@ -169,6 +172,22 @@ const TRANSLATIONS: Record<Lang, Record<TKey, string>> = {
     live: "● SIMULATION ONLINE",
     paused: "⏸ PAUSED",
     simNote: "SIMULATED · NOT REAL EW DATA",
+
+    navOverview: "Overview",
+    navEmitters: "Emitters",
+    navDecisions: "Decisions",
+    navAnalytics: "Analytics",
+    navBenchmarks: "Benchmarks",
+    navSettings: "Settings",
+
+    simulationLabel: "SIMULATION",
+    versionLabel: "v1.0 Prototype",
+
+    pageEmitters: "EMITTER INTELLIGENCE MODULE",
+    pageDecisions: "DECISION HISTORY",
+    pageAnalytics: "ANALYTICS",
+    pageBenchmarks: "STRATEGY BENCHMARKS",
+    pageSettings: "SIMULATION CONTROLS",
   },
 
   hi: {
@@ -240,6 +259,22 @@ const TRANSLATIONS: Record<Lang, Record<TKey, string>> = {
     live: "● सिमुलेशन ऑनलाइन",
     paused: "⏸ रुका",
     simNote: "सिमुलेटेड · वास्तविक EW डेटा नहीं",
+
+    navOverview: "अवलोकन",
+    navEmitters: "उत्सर्जक",
+    navDecisions: "निर्णय",
+    navAnalytics: "विश्लेषण",
+    navBenchmarks: "बेंचमार्क",
+    navSettings: "सेटिंग्स",
+
+    simulationLabel: "सिमुलेशन",
+    versionLabel: "v1.0 प्रोटोटाइप",
+
+    pageEmitters: "उत्सर्जक बुद्धिमत्ता मॉड्यूल",
+    pageDecisions: "निर्णय इतिहास",
+    pageAnalytics: "विश्लेषण",
+    pageBenchmarks: "रणनीति बेंचमार्क",
+    pageSettings: "सिमुलेशन नियंत्रण",
   },
 
   fr: {
@@ -310,6 +345,22 @@ const TRANSLATIONS: Record<Lang, Record<TKey, string>> = {
     live: "● SIMULATION EN LIGNE",
     paused: "⏸ EN PAUSE",
     simNote: "SIMULÉ · PAS DE DONNÉES RÉELLES",
+
+    navOverview: "Aperçu",
+    navEmitters: "Émetteurs",
+    navDecisions: "Décisions",
+    navAnalytics: "Analytique",
+    navBenchmarks: "Comparaisons",
+    navSettings: "Paramètres",
+
+    simulationLabel: "SIMULATION",
+    versionLabel: "v1.0 Prototype",
+
+    pageEmitters: "MODULE DE RENSEIGNEMENT DES ÉMETTEURS",
+    pageDecisions: "HISTORIQUE DES DÉCISIONS",
+    pageAnalytics: "ANALYTIQUE",
+    pageBenchmarks: "COMPARAISON DES STRATÉGIES",
+    pageSettings: "CONTRÔLES DE SIMULATION",
   },
 
   es: {
@@ -380,6 +431,22 @@ const TRANSLATIONS: Record<Lang, Record<TKey, string>> = {
     live: "● SIMULACIÓN EN LÍNEA",
     paused: "⏸ PAUSADO",
     simNote: "SIMULADO · NO DATOS REALES",
+
+    navOverview: "Resumen",
+    navEmitters: "Emisores",
+    navDecisions: "Decisiones",
+    navAnalytics: "Analítica",
+    navBenchmarks: "Comparativas",
+    navSettings: "Ajustes",
+
+    simulationLabel: "SIMULACIÓN",
+    versionLabel: "v1.0 Prototipo",
+
+    pageEmitters: "MÓDULO DE INTELIGENCIA DE EMISORES",
+    pageDecisions: "HISTORIAL DE DECISIONES",
+    pageAnalytics: "ANALÍTICA",
+    pageBenchmarks: "COMPARACIÓN DE ESTRATEGIAS",
+    pageSettings: "CONTROLES DE SIMULACIÓN",
   },
 
   de: {
@@ -450,6 +517,22 @@ const TRANSLATIONS: Record<Lang, Record<TKey, string>> = {
     live: "● SIMULATION ONLINE",
     paused: "⏸ PAUSIERT",
     simNote: "SIMULIERT · KEINE ECHTEN DATEN",
+
+    navOverview: "Übersicht",
+    navEmitters: "Sender",
+    navDecisions: "Entscheidungen",
+    navAnalytics: "Analysen",
+    navBenchmarks: "Benchmarks",
+    navSettings: "Einstellungen",
+
+    simulationLabel: "SIMULATION",
+    versionLabel: "v1.0 Prototyp",
+
+    pageEmitters: "SENDER-INTELLIGENZ-MODUL",
+    pageDecisions: "ENTSCIDUNGSVERLAUF",
+    pageAnalytics: "ANALYTIK",
+    pageBenchmarks: "STRATEGIE-VERGLEICH",
+    pageSettings: "SIMULATIONS-STEUERUNG",
   },
 }
 
@@ -896,7 +979,7 @@ function MiniChart({
   )
 }
 
-function StatusChip({ status, c }: { status: string c: Palette }) {
+function StatusChip({ status, c }: { status: string; c: Palette }) {
   const color = getStatusColor(status, c)
 
   return (
@@ -1168,7 +1251,7 @@ function CandidateRanking({
   )
 }
 
-function BeliefUpdateCard({ delta, c }: { delta: ScanDelta c: Palette }) {
+function BeliefUpdateCard({ delta, c }: { delta: ScanDelta; c: Palette }) {
   const bBef = Math.round(delta.beliefBefore * 100),
     bAft = Math.round(delta.beliefAfter * 100)
 
@@ -1571,18 +1654,18 @@ function DecisionPanel({
 
 // ─── Sidebar ──────────────────────────────────────────────────────────────────
 
-const NAV_ITEMS: { page: Page icon: string label: string }[] = [
-  { page: "overview", icon: "⊞", label: "Overview" },
+const NAV_ITEMS: { page: Page; icon: string; labelKey: TKey }[] = [
+  { page: "overview", icon: "⊞", labelKey: "navOverview" },
 
-  { page: "emitters", icon: "◈", label: "Emitters" },
+  { page: "emitters", icon: "◈", labelKey: "navEmitters" },
 
-  { page: "decisions", icon: "⊕", label: "Decisions" },
+  { page: "decisions", icon: "⊕", labelKey: "navDecisions" },
 
-  { page: "analytics", icon: "∿", label: "Analytics" },
+  { page: "analytics", icon: "∿", labelKey: "navAnalytics" },
 
-  { page: "benchmarks", icon: "⊠", label: "Benchmarks" },
+  { page: "benchmarks", icon: "⊠", labelKey: "navBenchmarks" },
 
-  { page: "settings", icon: "⚙", label: "Settings" },
+  { page: "settings", icon: "⚙", labelKey: "navSettings" },
 ]
 
 function Sidebar({
@@ -1590,11 +1673,13 @@ function Sidebar({
   setPage,
   c,
   running,
+  t,
 }: {
   activePage: Page
   setPage: (p: Page) => void
   c: Palette
   running: boolean
+  t: (k: TKey) => string
 }) {
   return (
     <div
@@ -1647,7 +1732,7 @@ function Sidebar({
           >
             <span className="mono text-sm w-5 text-center">{item.icon}</span>
             <span className="mono text-[11px] tracking-wider font-bold">
-              {item.label.toUpperCase()}
+              {t(item.labelKey).toUpperCase()}
             </span>
           </button>
         ))}
@@ -1656,10 +1741,10 @@ function Sidebar({
       {/* Bottom info */}
       <div className="px-4 py-3 border-t" style={{ borderColor: c.border }}>
         <div className="mono text-[9px]" style={{ color: c.textVeryDim }}>
-          SIMULATION
+          {t("simulationLabel")}
         </div>
         <div className="mono text-[9px]" style={{ color: c.textVeryDim }}>
-          v1.0 Prototype
+          {t("versionLabel")}
         </div>
       </div>
     </div>
@@ -1673,11 +1758,13 @@ function EmittersPage({
   step,
   scanningId,
   c,
+  t,
 }: {
   regions: Region[]
   step: number
   scanningId: string | null
   c: Palette
+  t: (k: TKey) => string
 }) {
   const [selected, setSelected] = useState<Region | null>(null)
 
@@ -1733,7 +1820,7 @@ function EmittersPage({
               className="mono text-xs font-bold tracking-widest"
               style={{ color: c.textMuted }}
             >
-              EMITTER INTELLIGENCE MODULE
+              {t("pageEmitters")}
             </div>
             <div
               className="mono text-[9px] mt-0.5"
@@ -2039,10 +2126,12 @@ function DecisionsPage({
   events,
   c,
   step,
+  t,
 }: {
   events: DecisionEvent[]
   c: Palette
   step: number
+  t: (k: TKey) => string
 }) {
   const [expanded, setExpanded] = useState<number | null>(null)
 
@@ -2053,7 +2142,7 @@ function DecisionsPage({
           className="mono text-xs font-bold tracking-widest"
           style={{ color: c.textMuted }}
         >
-          DECISION HISTORY
+              {t("pageDecisions")}
         </div>
         <div
           className="mono text-[9px] mt-0.5"
@@ -2178,11 +2267,13 @@ function AnalyticsPage({
   regions,
   step,
   c,
+  t,
 }: {
   history: ScanRecord[]
   regions: Region[]
   step: number
   c: Palette
+  t: (k: TKey) => string
 }) {
   const detRate = history.length
     ? history.filter((r) => r.detectedSignal).length / history.length
@@ -2270,7 +2361,7 @@ function AnalyticsPage({
           className="mono text-xs font-bold tracking-widest"
           style={{ color: c.textMuted }}
         >
-          ANALYTICS
+              {t("pageAnalytics")}
         </div>
         <div
           className="mono text-[9px] mt-0.5"
@@ -2418,7 +2509,7 @@ function AnalyticsPage({
   )
 }
 
-function BenchmarksPage({ history, c }: { history: ScanRecord[] c: Palette }) {
+function BenchmarksPage({ history, c, t }: { history: ScanRecord[]; c: Palette; t: (k: TKey) => string }) {
   const adaptRecords = history.filter((r) => r.strategy === "ADAPT_SCAN")
 
   const adaptDetect =
@@ -2473,7 +2564,7 @@ function BenchmarksPage({ history, c }: { history: ScanRecord[] c: Palette }) {
           className="mono text-xs font-bold tracking-widest"
           style={{ color: c.textMuted }}
         >
-          STRATEGY BENCHMARKS
+              {t("pageBenchmarks")}
         </div>
         <div
           className="mono text-[9px] mt-0.5"
@@ -2591,6 +2682,7 @@ function SettingsPage({
   running,
   reset,
   c,
+  t,
 
   onIntroduceEmitter,
   onIncreaseNoise,
@@ -2607,6 +2699,7 @@ function SettingsPage({
   running: boolean
   reset: (s: Strategy, cfg?: any) => void
   c: Palette
+  t: (k: TKey) => string
 
   onIntroduceEmitter: () => void
   onIncreaseNoise: () => void
@@ -2627,7 +2720,7 @@ function SettingsPage({
           className="mono text-xs font-bold tracking-widest"
           style={{ color: c.textMuted }}
         >
-          SIMULATION CONTROLS
+          {t("pageSettings")}
         </div>
 
         <div className="grid grid-cols-2 gap-6">
@@ -3402,6 +3495,24 @@ export default function App() {
     regionsRef.current = regions
   }, [regions])
 
+  useEffect(() => {
+    api
+      .getLanguage()
+      .then((pref) => {
+        if (
+          pref.value &&
+          (Object.keys(TRANSLATIONS) as Lang[]).includes(pref.value as Lang)
+        ) {
+          setLang(pref.value as Lang)
+        }
+      })
+      .catch(() => {})
+  }, [])
+
+  useEffect(() => {
+    api.setLanguage("default", lang).catch(() => {})
+  }, [lang])
+
   const c: Palette = theme === "dark" ? DARK : LIGHT
 
   const t = (k: TKey) => TRANSLATIONS[lang][k]
@@ -3879,6 +3990,7 @@ export default function App() {
           setPage={setActivePage}
           c={c}
           running={running}
+          t={t}
         />
 
         {/* Overview page: spectrum + decision panel */}
@@ -4114,10 +4226,11 @@ export default function App() {
             step={step}
             scanningId={scanningId}
             c={c}
+            t={t}
           />
         )}
         {activePage === "decisions" && (
-          <DecisionsPage events={decisionEvents} c={c} step={step} />
+          <DecisionsPage events={decisionEvents} c={c} step={step} t={t} />
         )}
         {activePage === "analytics" && (
           <AnalyticsPage
@@ -4125,10 +4238,11 @@ export default function App() {
             regions={regions}
             step={step}
             c={c}
+            t={t}
           />
         )}
         {activePage === "benchmarks" && (
-          <BenchmarksPage history={history} c={c} />
+          <BenchmarksPage history={history} c={c} t={t} />
         )}
         {activePage === "settings" && (
           <SettingsPage
@@ -4137,6 +4251,7 @@ export default function App() {
             running={running}
             reset={reset}
             c={c}
+            t={t}
             onIntroduceEmitter={introduceEmitter}
             onIncreaseNoise={increaseNoise}
             onReduceBudget={reduceBudget}

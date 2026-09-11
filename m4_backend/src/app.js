@@ -5,6 +5,7 @@ import authRoutes from './routes/authRoutes.js'
 import scanRoutes from './routes/scanRoutes.js'
 import simulationRoutes from './routes/simulationRoutes.js'
 import publicSimulationRoutes from './routes/publicSimulationRoutes.js'
+import languageRoutes from './routes/languageRoutes.js'
 import { errorHandler, notFoundHandler } from './middleware/errorHandler.js'
 
 const app = express()
@@ -28,6 +29,7 @@ app.get('/api/health', (req, res) => {
 
 app.use('/api', scanRoutes)
 app.use('/api', publicSimulationRoutes)
+app.use('/api/language', languageRoutes)
 app.use('/api/simulation', simulationRoutes)
 
 app.get('/', (req, res) => {

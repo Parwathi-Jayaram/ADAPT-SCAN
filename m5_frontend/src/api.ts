@@ -179,4 +179,10 @@ export const api = {
   async triggerEvent(session_id: string, event_type: string) {
     return post("/api/events", { session_id, event_type })
   },
+  async getLanguage(key = "default") {
+    return get(`/api/language?key=${encodeURIComponent(key)}`)
+  },
+  async setLanguage(key = "default", value: string) {
+    return post("/api/language", { key, value })
+  },
 }
