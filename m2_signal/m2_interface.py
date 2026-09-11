@@ -172,45 +172,23 @@ class M2Interface:
         self._region_histories = {}
         self._last_observations = {}
 
-    def _extract_features_for_m1(
-        self,
-        features
-    ) -> List[float]:
-        """
-        Convert M2 FeatureExtractor output into the
-        8 numerical features expected by M1.
-
-        Feature order:
-        0 -> detection confidence
-        1 -> strength estimate
-        2 -> bandwidth estimate
-        3 -> activity estimate
-        4 -> uncertainty
-        5 -> reliability
-        6 -> stability
-        7 -> change rate
-        """
+    
+    def _extract_features_for_m1(self, features) -> List[float]:
+        """Extract numerical features for M1's decision engine."""
+        def clamp(v):
+            return max(0.0, min(1.0, float(v)))
 
         return [
-            float(features.detection_confidence),
-            float(features.strength_estimate),
-            float(features.bandwidth_estimate),
-            float(features.activity_estimate),
-            float(features.uncertainty),
-            float(features.reliability),
-            float(
-                features.temporal_features.get(
-                    "stability",
-                    1.0
-                )
-            ),
-            float(
-                features.temporal_features.get(
-                    "change_rate",
-                    0.0
-                )
-            )
+            clamp(features.detection_confidence),
+            clamp(features.strength_estimate),
+            clamp(features.bandwidth_estimate),
+            clamp(features.activity_estimate),
+            clamp(features.uncertainty),
+            clamp(features.reliability),
+            clamp(features.temporal_features.get("stability", 1.0)),
+            clamp(features.temporal_features.get("change_rate", 0.0)),
         ]
+
 
     def generate_observation(
         self,

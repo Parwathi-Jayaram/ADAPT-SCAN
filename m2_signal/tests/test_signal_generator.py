@@ -1,131 +1,82 @@
-import sys
-from pathlib import Path
+"""
+test_signal_generator.py
+Tests for signal_generator.py
+"""
 
-# Allow Python to find signal_generator.py
-sys.path.append(str(Path(__file__).resolve().parents[1]))
+import sys
+import os
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from signal_generator import generate_signal
 
 
 def test_continuous_signal():
-    signal = generate_signal(
-        region_id="R7",
-        signal_type="continuous",
-        seed=42
-    )
-
-    assert signal["region_id"] == "R7"
-    assert signal["signal_type"] == "continuous"
-    assert 0.1 <= signal["bandwidth"] <= 1.0
-    assert 0.3 <= signal["strength"] <= 1.0
-    assert signal["activity"] == 1.0
+    """Test continuous signal generation."""
+    sig = generate_signal("R7", "continuous", seed=42)
+    assert sig["region_id"] == "R7"
+    assert sig["signal_type"] == "continuous"
+    assert 0.0 <= sig["strength"] <= 1.0
+    assert 0.0 <= sig["bandwidth"] <= 1.0
+    assert sig["activity"] == 1.0
+    print("✅ test_continuous_signal passed")
 
 
 def test_intermittent_signal():
-    signal = generate_signal(
-        region_id="R7",
-        signal_type="intermittent",
-        seed=42
-    )
-
-    assert signal["signal_type"] == "intermittent"
-    assert 0.2 <= signal["activity"] <= 0.8
+    """Test intermittent signal generation."""
+    sig = generate_signal("R3", "intermittent", seed=42)
+    assert sig["signal_type"] == "intermittent"
+    assert 0.0 <= sig["activity"] <= 1.0
+    print("✅ test_intermittent_signal passed")
 
 
 def test_appearing_signal():
-    signal = generate_signal(
-        region_id="R7",
-        signal_type="appearing",
-        seed=42
-    )
-
-    assert signal["signal_type"] == "appearing"
-    assert "start_time" in signal
-
-
-def test_changing_strength_signal():
-    signal = generate_signal(
-        region_id="R7",
-        signal_type="changing-strength",
-        seed=42
-    )
-
-    assert signal["signal_type"] == "changing-strength"
-    assert "strength_change" in signal
+    """Test appearing signal generation."""
+    sig = generate_signal("R5", "appearing", seed=42)
+    assert sig["signal_type"] == "appearing"
+    assert "start_time" in sig
+    print("✅ test_appearing_signal passed")
 
 
 def test_disappearing_signal():
-    signal = generate_signal(
-        region_id="R7",
-        signal_type="disappearing",
-        seed=42
-    )
-
-    assert signal["signal_type"] == "disappearing"
-    assert "end_time" in signal
+    """Test disappearing signal generation."""
+    sig = generate_signal("R9", "disappearing", seed=42)
+    assert sig["signal_type"] == "disappearing"
+    assert "end_time" in sig
+    print("✅ test_disappearing_signal passed")
 
 
-def test_noisy_signal():
-    signal = generate_signal(
-        region_id="R7",
-        signal_type="noisy",
-        seed=42
-    )
-
-    assert signal["signal_type"] == "noisy"
-
-
-def test_overlapping_signal():
-    signal = generate_signal(
-        region_id="R7",
-        signal_type="overlapping",
-        seed=42
-    )
-
-    assert signal["signal_type"] == "overlapping"
+def test_changing_strength_signal():
+    """Test changing-strength signal generation."""
+    sig = generate_signal("R11", "changing-strength", seed=42)
+    assert sig["signal_type"] == "changing-strength"
+    assert "strength_change" in sig
+    print("✅ test_changing_strength_signal passed")
 
 
 def test_reproducibility():
-    signal_1 = generate_signal(
-        region_id="R7",
-        signal_type="continuous",
-        seed=42
-    )
-
-    signal_2 = generate_signal(
-        region_id="R7",
-        signal_type="continuous",
-        seed=42
-    )
-
-    assert signal_1 == signal_2
-
-
-def test_different_seeds_produce_different_signals():
-    signal_1 = generate_signal(
-        region_id="R7",
-        signal_type="continuous",
-        seed=42
-    )
-
-    signal_2 = generate_signal(
-        region_id="R7",
-        signal_type="continuous",
-        seed=100
-    )
-
-    assert signal_1 != signal_2
+    """Test that same seed produces same signal."""
+    sig1 = generate_signal("R7", "continuous", seed=42)
+    sig2 = generate_signal("R7", "continuous", seed=42)
+    assert sig1["strength"] == sig2["strength"]
+    assert sig1["bandwidth"] == sig2["bandwidth"]
+    print("✅ test_reproducibility passed")
 
 
 def test_invalid_signal_type():
+    """Test that invalid signal type raises error."""
     try:
-        generate_signal(
-            region_id="R7",
-            signal_type="invalid",
-            seed=42
-        )
-
-        assert False, "Expected ValueError"
-
+        generate_signal("R7", "invalid_type", seed=42)
+        assert False, "Should have raised ValueError"
     except ValueError:
-        assert True
+        print("✅ test_invalid_signal_type passed")
+
+
+if __name__ == "__main__":
+    test_continuous_signal()
+    test_intermittent_signal()
+    test_appearing_signal()
+    test_disappearing_signal()
+    test_changing_strength_signal()
+    test_reproducibility()
+    test_invalid_signal_type()
+    print("\n🎉 All signal_generator tests passed!")

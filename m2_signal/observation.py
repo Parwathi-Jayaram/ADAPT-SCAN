@@ -130,9 +130,13 @@ class ObservationModel:
         confidence = max(0.1, min(1.0, confidence))
         
         detected = self._apply_detection_logic(noisy_strength, confidence)
-        
+
         if self.rng.random() < self.missing_prob:
             detected = False
+            noisy_strength = 0.0
+            confidence = 0.1
+        elif not detected:
+            # ✅ FIX: When not detected, zero out strength and confidence
             noisy_strength = 0.0
             confidence = 0.1
         

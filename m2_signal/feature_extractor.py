@@ -89,20 +89,23 @@ class FeatureExtractor:
         
         High uncertainty when:
         - Observation confidence is low
-        - Signal is intermittent/changing
-        - Recent history shows inconsistency
-        - Signal strength is weak
+        - Signal is weak / intermittent
+        - History is inconsistent
+        
+        Low uncertainty when:
+        - No signal detected (we are confident it is empty)
+        - High confidence detection
         """
-        # Base uncertainty from observation confidence
+        # ✅ FIX: If not detected, uncertainty should be low (we are sure it is empty)
+        if not observation.detected:
+            return 0.1
+        
+        # Base uncertainty from confidence
         base_uncertainty = 1.0 - observation.confidence
         
         # Add uncertainty for weak signals
         if observation.strength < 0.3:
             base_uncertainty += 0.2
-        
-        # Add uncertainty if not detected
-        if not observation.detected:
-            base_uncertainty += 0.15
         
         # Add uncertainty from noise level
         noise_level = observation.features.get("noise_level", "medium")
