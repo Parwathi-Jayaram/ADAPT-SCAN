@@ -1390,8 +1390,10 @@ function TimelineEvent({
 
   return (
     <div
-      className="relative flex items-center gap-3 px-3 py-2.5 rounded-lg border transition-all duration-300"
+      className="relative flex flex-col gap-2 px-3 py-2.5 rounded-lg border transition-all duration-300 overflow-hidden"
       style={{
+        width: 220,
+        height: 156,
         background: isActive
           ? c.bgActive
           : isLatest
@@ -1403,68 +1405,75 @@ function TimelineEvent({
             ? c.borderActive
             : c.border,
         boxShadow: isActive ? `0 0 12px ${c.accent}33` : "none",
-        minWidth: 0,
       }}
     >
-      <div className="flex flex-col items-center gap-1 shrink-0">
-        <div
-          className="w-2.5 h-2.5 rounded-full border-2"
-          style={{
-            borderColor: isActive ? c.accent : isLatest ? c.blue : c.borderActive,
-            background: isActive ? c.accent : "transparent",
-            boxShadow: isActive ? `0 0 8px ${c.accent}` : "none",
-          }}
-        />
-      </div>
-      <div className="flex flex-col gap-0.5 min-w-0 flex-1">
-        <div className="flex items-center gap-2 flex-wrap">
-          <span
-            className="mono text-sm font-bold"
-            style={{ color: isActive ? c.accent : c.textPrimary }}
-          >
-            {rec.regionId}
-          </span>
-          <span
-            className="mono text-[9px] px-1.5 py-0.5 rounded-sm font-bold tracking-wider border"
+      <div className="flex items-center gap-3">
+        <div className="flex flex-col items-center gap-1 shrink-0">
+          <div
+            className="w-2.5 h-2.5 rounded-full border-2"
             style={{
-              background: c.bgIntel,
-              color: c.textInfo,
-              borderColor: c.borderActive,
+              borderColor: isActive ? c.accent : isLatest ? c.blue : c.borderActive,
+              background: isActive ? c.accent : "transparent",
+              boxShadow: isActive ? `0 0 8px ${c.accent}` : "none",
+            }}
+          />
+        </div>
+        <div className="flex flex-col gap-0.5 min-w-0 flex-1">
+          <div className="flex items-center gap-2 flex-wrap">
+            <span
+              className="mono text-sm font-bold"
+              style={{ color: isActive ? c.accent : c.textPrimary }}
+            >
+              {rec.regionId}
+            </span>
+            <span
+              className="mono text-[9px] px-1.5 py-0.5 rounded-sm font-bold tracking-wider border shrink-0"
+              style={{
+                background: c.bgIntel,
+                color: c.textInfo,
+                borderColor: c.borderActive,
+              }}
+            >
+              {phase}
+            </span>
+          </div>
+          <div
+            className="mono text-[10px]"
+            style={{ color: c.textMuted }}
+          >
+            {t("timelineElapsed")} {formatT(rec.step * 1.2)} · {t("timelineEvent")} #{rec.step}
+          </div>
+          <div
+            className="mono text-[9px] leading-snug"
+            style={{
+              color: c.textVeryDim,
+              display: "-webkit-box",
+              WebkitLineClamp: 2,
+              WebkitBoxOrient: "vertical",
+              overflow: "hidden",
             }}
           >
-            {phase}
+            {rec.explanation}
+          </div>
+        </div>
+        <div className="flex flex-col items-end gap-1 shrink-0">
+          <span
+            className="mono text-[10px] font-bold px-2 py-0.5 rounded-sm border"
+            style={{
+              background: statusColor + "22",
+              color: statusColor,
+              borderColor: statusColor + "55",
+            }}
+          >
+            {status}
+          </span>
+          <span
+            className="mono text-[9px]"
+            style={{ color: c.textVeryDim }}
+          >
+            IG {(rec.infoGain ?? 0).toFixed(2)} · UNC {(rec.uncertainty ?? 0).toFixed(2)}
           </span>
         </div>
-        <div
-          className="mono text-[10px]"
-          style={{ color: c.textMuted }}
-        >
-          {t("timelineElapsed")} {formatT(rec.step * 1.2)} · {t("timelineEvent")} #{rec.step}
-        </div>
-        <div
-          className="mono text-[9px]"
-          style={{ color: c.textVeryDim }}
-        >
-          {rec.explanation}
-        </div>
-      </div>
-      <div className="flex flex-col items-end gap-1 shrink-0">
-        <span
-          className="mono text-[10px] font-bold px-2 py-0.5 rounded-sm border"
-          style={{
-            background: statusColor + "22",
-            color: statusColor,
-            borderColor: statusColor + "55",
-          }}
-        >
-          {status}
-        </span>
-        <span
-          className="mono text-[9px]"
-          style={{ color: c.textVeryDim }}
-        >
-          IG {(rec.infoGain ?? 0).toFixed(2)} · UNC {(rec.uncertainty ?? 0).toFixed(2)}
-        </span>
       </div>
     </div>
   )
