@@ -1197,6 +1197,8 @@ function RegionCell({
     <div
       className="relative p-3 rounded border transition-all duration-300 overflow-hidden"
       style={{
+        width: 132,
+        height: 148,
         background: bg,
         borderColor: border,
         boxShadow: glow,
@@ -1234,7 +1236,7 @@ function RegionCell({
           {region.id}
         </span>
         <span
-          className="text-[9px] font-mono px-1.5 py-0.5 rounded-sm font-bold tracking-wider border"
+          className="text-[9px] font-mono px-1.5 py-0.5 rounded-sm font-bold tracking-wider border shrink-0"
           style={{
             background: TYPE_COLOR[region.signalType] + "22",
             color: TYPE_COLOR[region.signalType],
@@ -1438,22 +1440,10 @@ function TimelineEvent({
             </span>
           </div>
           <div
-            className="mono text-[10px]"
-            style={{ color: c.textMuted }}
+            className="mono text-[9px]"
+            style={{ color: c.textVeryDim }}
           >
-            {t("timelineElapsed")} {formatT(rec.step * 1.2)} · {t("timelineEvent")} #{rec.step}
-          </div>
-          <div
-            className="mono text-[9px] leading-snug"
-            style={{
-              color: c.textVeryDim,
-              display: "-webkit-box",
-              WebkitLineClamp: 2,
-              WebkitBoxOrient: "vertical",
-              overflow: "hidden",
-            }}
-          >
-            {rec.explanation}
+            {t("timelineEvent")} #{rec.step}
           </div>
         </div>
         <div className="flex flex-col items-end gap-1 shrink-0">
@@ -1471,7 +1461,7 @@ function TimelineEvent({
             className="mono text-[9px]"
             style={{ color: c.textVeryDim }}
           >
-            IG {(rec.infoGain ?? 0).toFixed(2)} · UNC {(rec.uncertainty ?? 0).toFixed(2)}
+            {t("timelineStatus")}
           </span>
         </div>
       </div>
@@ -1533,8 +1523,15 @@ function HorizontalTimeline({
               {phases.map((p) => p.label).join(" → ")}
             </span>
           </span>
-          <span style={{ color: c.textVeryDim }}>
-            {t("timelineRegion")} / {t("timelineHit")} / {t("timelineNil")}
+          <span
+            className="mono text-[9px] px-1.5 py-0.5 rounded-sm border"
+            style={{
+              background: c.bgDarkCard,
+              color: c.textMuted,
+              borderColor: c.border,
+            }}
+          >
+            {t("timelineRegion")} · {t("timelineHit")} / {t("timelineNil")}
           </span>
         </div>
       </div>
