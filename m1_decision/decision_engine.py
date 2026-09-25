@@ -16,9 +16,9 @@ class DecisionEngine:
 
     def __init__(
         self,
-        information_gain_weight=0.20,
-        threat_weight=0.65,
-        tracking_weight=0.10,
+        information_gain_weight=0.35,
+        threat_weight=0.45,
+        tracking_weight=0.15,
         uncertainty_weight=0.05,
         default_scan_cost=0.10,
     ):
@@ -168,7 +168,7 @@ class DecisionEngine:
             # Encourage exploration of regions that have not
             # been scanned yet.
             if region_id not in state.observations:
-                utility += 0.10
+                utility += 0.25
 
             # Prioritize regions where M2 detected a signal.
             observation = state.observations.get(region_id)

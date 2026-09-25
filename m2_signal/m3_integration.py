@@ -15,11 +15,18 @@ except ImportError:
 # Try importing M3's simulator
 try:
     from m3_simulator.simulator import Environment
-    from m3_simulator.simulator.tsrd_real_adapter import TSRDRealAdapter
     M3_AVAILABLE = True
 except ImportError:
     M3_AVAILABLE = False
-    print("⚠️ M3 simulator not available. Running in mock mode.")
+    print("[WARN] M3 simulator not available. Running in mock mode.")
+
+# Lazy import for TSRD adapter (requires h5py)
+def _get_tsrd_adapter():
+    try:
+        from m3_simulator.simulator.tsrd_real_adapter import TSRDRealAdapter
+        return TSRDRealAdapter
+    except ImportError:
+        return None
 
 
 class M2M3Bridge:
@@ -55,9 +62,9 @@ class M2M3Bridge:
         if self.m3_available:
             try:
                 self._initialize_environment()
-                print("✅ M3 Environment initialized successfully")
+                print("[OK] M3 Environment initialized successfully")
             except Exception as e:
-                print(f"⚠️ Failed to initialize M3 Environment: {e}")
+                print(f"[WARN] Failed to initialize M3 Environment: {e}")
                 self.m3_available = False
                 self.env = None
         else:
@@ -69,15 +76,18 @@ class M2M3Bridge:
         
         if self.use_real_data:
             try:
+                TSRDRealAdapter = _get_tsrd_adapter()
+                if TSRDRealAdapter is None:
+                    raise ImportError("TSRDRealAdapter not available (h5py missing)")
                 self.adapter = TSRDRealAdapter(data_dir=self.data_dir)
                 
                 # Use setattr to bypass type checking
                 setattr(self.env, 'tsrd_adapter', self.adapter)
                 setattr(self.env, 'using_real_data', True)
                 
-                print(f"✅ Using real TSRD data from {self.data_dir}")
+                print(f"[OK] Using real TSRD data from {self.data_dir}")
             except Exception as e:
-                print(f"⚠️ Failed to load TSRD data: {e}")
+                print(f"[WARN] Failed to load TSRD data: {e}")
     
     def reset_scenario(self, scenario_id: str = "S1", seed: Optional[int] = None) -> Dict[str, Any]:
         """Reset the environment to a specific scenario."""
@@ -241,10 +251,10 @@ if __name__ == "__main__":
     results = bridge.scan_multiple_regions(regions)
     
     for result in results:
-        status = "✅" if result['detected'] else "❌"
+        status = "[OK]" if result['detected'] else "[FAIL]"
         print(f"   {status} {result['region_id']}: "
               f"conf={result['confidence']:.3f}")
     
     print("\n" + "=" * 60)
-    print("✅ M2-M3 Bridge ready for integration!")
+    print("[OK] M2-M3 Bridge ready for integration!")
     print("=" * 60)

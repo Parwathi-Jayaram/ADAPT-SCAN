@@ -55,7 +55,7 @@ app.add_middleware(
 # ─── Scenario mapping ──────────────────────────────────────────────────────────
 
 FRONTEND_TO_BACKEND_SCENARIO: Dict[str, str] = {
-    "NORMAL": "S1",
+    "NORMAL": "S4",  # Changed from S1 to S4 (dynamic, 4 emitters)
     "DYNAMIC": "S4",
     "HIGH_NOISE": "S8",
     "LIMITED": "S6",

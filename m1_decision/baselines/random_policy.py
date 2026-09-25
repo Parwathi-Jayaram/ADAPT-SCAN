@@ -1,6 +1,6 @@
 import random
 
-from core.action import ScanAction
+from ..core.action import ScanAction
 
 
 class RandomPolicy:

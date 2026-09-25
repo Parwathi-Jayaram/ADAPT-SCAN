@@ -19,10 +19,10 @@ def check(label, condition, detail=""):
     global PASS, FAIL
     if condition:
         PASS += 1
-        print(f"✅ {label}")
+        print(f"[OK] {label}")
     else:
         FAIL += 1
-        print(f"❌ {label} {detail}")
+        print(f"[FAIL] {label} {detail}")
 
 
 print("=" * 70)
@@ -192,9 +192,9 @@ m2a = M2Interface(noise_level="medium", seed=42)
 m2b = M2Interface(noise_level="medium", seed=42)
 o1 = m2a.generate_observation({"region_id": "R7"})
 o2 = m2b.generate_observation({"region_id": "R7"})
-check("Same seed → same detected", o1["detected"] == o2["detected"])
-check("Same seed → same confidence", o1["confidence"] == o2["confidence"])
-check("Same seed → same strength", o1["strength"] == o2["strength"])
+check("Same seed -> same detected", o1["detected"] == o2["detected"])
+check("Same seed -> same confidence", o1["confidence"] == o2["confidence"])
+check("Same seed -> same strength", o1["strength"] == o2["strength"])
 
 # ============================================================
 # SECTION 8: NOISE LEVELS
@@ -310,12 +310,12 @@ else:
 print("\n" + "=" * 70)
 print("FINAL SUMMARY")
 print("=" * 70)
-print(f"✅ Passed: {PASS}")
-print(f"❌ Failed: {FAIL}")
+print(f"[OK] Passed: {PASS}")
+print(f"[FAIL] Failed: {FAIL}")
 print(f"Total:    {PASS + FAIL}")
 
 if FAIL == 0:
-    print("\n🎉 ALL CHECKS PASSED — M2 IS PRODUCTION READY!")
+    print("\n[OK] ALL CHECKS PASSED - M2 IS PRODUCTION READY!")
 else:
-    print(f"\n⚠️ {FAIL} CHECK(S) FAILED — REVIEW ABOVE")
+    print(f"\n[WARN] {FAIL} CHECK(S) FAILED - REVIEW ABOVE")
 print("=" * 70)

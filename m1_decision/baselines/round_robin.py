@@ -1,4 +1,4 @@
-from core.action import ScanAction
+from ..core.action import ScanAction
 
 
 class RoundRobinPolicy:

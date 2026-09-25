@@ -13,7 +13,9 @@ def generate_signal(
     It must NOT be directly exposed to the AI/decision engine.
     """
 
-    rng = random.Random(seed)
+    region_hash = hash(str(region_id)) % (2**32)
+    combined_seed = seed + region_hash if seed is not None else region_hash
+    rng = random.Random(combined_seed)
 
     # Basic signal properties
     bandwidth = rng.uniform(0.1, 1.0)
