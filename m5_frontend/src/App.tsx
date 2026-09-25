@@ -96,7 +96,75 @@ type Palette = typeof DARK
 
 // ─── Translations ─────────────────────────────────────────────────────────────
 
-type TKey = "appTitle" | "appSubtitle" | "step" | "strategy" | "budget" | "pause" | "run" | "currentIntel" | "detected" | "highPriority" | "uncertain" | "budgetUsed" | "scanning" | "spectrumEnv" | "beliefState" | "scanTimeline" | "awaiting" | "whyScan" | "startSim" | "controls" | "comparison" | "about" | "emitters" | "noiseLevel" | "scanBudget" | "speedMs" | "dynamicEvents" | "on" | "off" | "scenario" | "runStrategy" | "strategyComparison" | "currentMetrics" | "scansExecuted" | "signalsDetected" | "avgInfoGain" | "avgThreatVal" | "detectionRate" | "infoGain" | "threatValue" | "trackUrgency" | "scanCost" | "aiAssistant" | "aiPlaceholder" | "send" | "aiGreet" | "langLabel" | "footerLeft" | "live" | "paused" | "simNote"
+type TKey =
+  | "appTitle"
+  | "appSubtitle"
+  | "step"
+  | "strategy"
+  | "budget"
+  | "pause"
+  | "run"
+  | "currentIntel"
+  | "detected"
+  | "highPriority"
+  | "uncertain"
+  | "budgetUsed"
+  | "scanning"
+  | "spectrumEnv"
+  | "beliefState"
+  | "scanTimeline"
+  | "timelinePhase"
+  | "timelinePhaseObserve"
+  | "timelinePhaseEvaluate"
+  | "timelinePhaseDecide"
+  | "timelinePhaseScan"
+  | "timelinePhaseUpdate"
+  | "timelineCompleted"
+  | "timelinePending"
+  | "timelineActive"
+  | "timelineRegion"
+  | "timelineHit"
+  | "timelineNil"
+  | "timelineElapsed"
+  | "timelineStatus"
+  | "timelineEvent"
+  | "timelineWhy"
+  | "timelineLegend"
+  | "awaiting"
+  | "whyScan"
+  | "startSim"
+  | "controls"
+  | "comparison"
+  | "about"
+  | "emitters"
+  | "noiseLevel"
+  | "scanBudget"
+  | "speedMs"
+  | "dynamicEvents"
+  | "on"
+  | "off"
+  | "scenario"
+  | "runStrategy"
+  | "strategyComparison"
+  | "currentMetrics"
+  | "scansExecuted"
+  | "signalsDetected"
+  | "avgInfoGain"
+  | "avgThreatVal"
+  | "detectionRate"
+  | "infoGain"
+  | "threatValue"
+  | "trackUrgency"
+  | "scanCost"
+  | "aiAssistant"
+  | "aiPlaceholder"
+  | "send"
+  | "aiGreet"
+  | "langLabel"
+  | "footerLeft"
+  | "live"
+  | "paused"
+  | "simNote"
 
 const TRANSLATIONS: Record<Lang, Record<TKey, string>> = {
   en: {
@@ -121,6 +189,23 @@ const TRANSLATIONS: Record<Lang, Record<TKey, string>> = {
     beliefState: "BELIEF STATE — SIGNAL EXISTENCE PROBABILITY",
 
     scanTimeline: "SCAN TIMELINE",
+    timelinePhase: "ADAPT-SCAN CYCLE",
+    timelinePhaseObserve: "OBSERVE",
+    timelinePhaseEvaluate: "EVALUATE",
+    timelinePhaseDecide: "DECIDE",
+    timelinePhaseScan: "SCAN",
+    timelinePhaseUpdate: "UPDATE",
+    timelineCompleted: "DONE",
+    timelinePending: "PENDING",
+    timelineActive: "ACTIVE",
+    timelineRegion: "REGION",
+    timelineHit: "HIT",
+    timelineNil: "NIL",
+    timelineElapsed: "ELAPSED",
+    timelineStatus: "STATUS",
+    timelineEvent: "EVENT",
+    timelineWhy: "WHY",
+    timelineLegend: "LEGEND",
     awaiting: "— awaiting —",
     whyScan: "DECISION ENGINE",
 
@@ -193,6 +278,23 @@ const TRANSLATIONS: Record<Lang, Record<TKey, string>> = {
     beliefState: "विश्वास अवस्था — संकेत अस्तित्व संभावना",
 
     scanTimeline: "स्कैन टाइमलाइन",
+    timelinePhase: "ADAPT-SCAN CYCLE",
+    timelinePhaseObserve: "OBSERVE",
+    timelinePhaseEvaluate: "EVALUATE",
+    timelinePhaseDecide: "DECIDE",
+    timelinePhaseScan: "SCAN",
+    timelinePhaseUpdate: "UPDATE",
+    timelineCompleted: "DONE",
+    timelinePending: "PENDING",
+    timelineActive: "ACTIVE",
+    timelineRegion: "REGION",
+    timelineHit: "HIT",
+    timelineNil: "NIL",
+    timelineElapsed: "ELAPSED",
+    timelineStatus: "STATUS",
+    timelineEvent: "EVENT",
+    timelineWhy: "WHY",
+    timelineLegend: "LEGEND",
     awaiting: "— प्रतीक्षारत —",
     whyScan: "निर्णय इंजन",
 
@@ -264,6 +366,23 @@ const TRANSLATIONS: Record<Lang, Record<TKey, string>> = {
     beliefState: "ÉTAT DE CROYANCE",
 
     scanTimeline: "CHRONOLOGIE",
+    timelinePhase: "CYCLE ADAPT-SCAN",
+    timelinePhaseObserve: "OBSERVER",
+    timelinePhaseEvaluate: "ÉVALUER",
+    timelinePhaseDecide: "DÉCIDER",
+    timelinePhaseScan: "BALAYER",
+    timelinePhaseUpdate: "METTRE À JOUR",
+    timelineCompleted: "TERMINÉ",
+    timelinePending: "EN ATTENTE",
+    timelineActive: "ACTIF",
+    timelineRegion: "RÉGION",
+    timelineHit: "COUP",
+    timelineNil: "NIL",
+    timelineElapsed: "ÉCOULÉ",
+    timelineStatus: "STATUT",
+    timelineEvent: "ÉVÉNEMENT",
+    timelineWhy: "POURQUOI",
+    timelineLegend: "LÉGENDE",
     awaiting: "— en attente —",
     whyScan: "MOTEUR DE DÉCISION",
 
@@ -334,6 +453,23 @@ const TRANSLATIONS: Record<Lang, Record<TKey, string>> = {
     beliefState: "ESTADO DE CREENCIA",
 
     scanTimeline: "LÍNEA DE TIEMPO",
+    timelinePhase: "CICLO ADAPT-SCAN",
+    timelinePhaseObserve: "OBSERVAR",
+    timelinePhaseEvaluate: "EVALUAR",
+    timelinePhaseDecide: "DECIDIR",
+    timelinePhaseScan: "ESCANEAR",
+    timelinePhaseUpdate: "ACTUALIZAR",
+    timelineCompleted: "HECHO",
+    timelinePending: "PENDIENTE",
+    timelineActive: "ACTIVO",
+    timelineRegion: "REGIÓN",
+    timelineHit: "ACIERTO",
+    timelineNil: "NIL",
+    timelineElapsed: "TRANSCURRIDO",
+    timelineStatus: "ESTADO",
+    timelineEvent: "EVENTO",
+    timelineWhy: "PORQUÉ",
+    timelineLegend: "LEYENDA",
     awaiting: "— esperando —",
     whyScan: "MOTOR DE DECISIÓN",
 
@@ -404,6 +540,23 @@ const TRANSLATIONS: Record<Lang, Record<TKey, string>> = {
     beliefState: "GLAUBENSZUSTAND",
 
     scanTimeline: "ZEITLINIE",
+    timelinePhase: "ADAPT-SCAN-ZYKLUS",
+    timelinePhaseObserve: "OBSERVIEREN",
+    timelinePhaseEvaluate: "BEWERTEN",
+    timelinePhaseDecide: "ENTSCHEIDEN",
+    timelinePhaseScan: "SCANNEN",
+    timelinePhaseUpdate: "AKTUALISIEREN",
+    timelineCompleted: "ERLEDIGT",
+    timelinePending: "AUSSTEHEND",
+    timelineActive: "AKTIV",
+    timelineRegion: "REGION",
+    timelineHit: "TREFFER",
+    timelineNil: "NIL",
+    timelineElapsed: "VERGANGEN",
+    timelineStatus: "STATUS",
+    timelineEvent: "EREIGNIS",
+    timelineWhy: "WARUM",
+    timelineLegend: "LEGENDE",
     awaiting: "— wartend —",
     whyScan: "ENTSCHEIDUNGSMOTOR",
 
@@ -966,25 +1119,34 @@ function StatBadge({
   color = "#00e57a",
   bg,
   border,
+  c,
 }: {
   label: string
   value: string | number
   color?: string
   bg: string
   border: string
+  c: Palette
 }) {
   return (
     <div
-      className="flex flex-col items-center px-3 py-2 rounded border"
-      style={{ background: bg, borderColor: border }}
+      className="flex flex-col items-center px-4 py-3 rounded border min-w-[120px]"
+      style={{
+        background: bg,
+        borderColor: border,
+        boxShadow: "0 1px 0 rgba(255,255,255,0.03) inset",
+      }}
     >
       <span
-        className="text-[9px] font-mono uppercase tracking-widest"
-        style={{ color: "#4a7a99" }}
+        className="text-[10px] font-mono uppercase tracking-widest"
+        style={{ color: c.textMuted }}
       >
         {label}
       </span>
-      <span className="text-base font-mono font-bold mt-0.5" style={{ color }}>
+      <span
+        className="text-2xl font-mono font-bold mt-1 leading-none"
+        style={{ color }}
+      >
         {value}
       </span>
     </div>
@@ -994,17 +1156,20 @@ function StatBadge({
 function RegionCell({
   region,
   scanning,
+  selected,
   c,
 }: {
   region: Region
   scanning: boolean
+  selected?: boolean
   c: Palette
 }) {
   const threat = region.threatLevel
+  const isHighPriority = region.active && threat > 0.7
 
   const bg = scanning
     ? c.bgScanning
-    : region.active && threat > 0.7
+    : isHighPriority
       ? c.bgHighThreat
       : region.active
         ? c.bgActive
@@ -1012,23 +1177,30 @@ function RegionCell({
 
   const border = scanning
     ? c.accent
-    : region.active && threat > 0.7
-      ? c.red
-      : region.active
-        ? c.borderActive
-        : c.borderSilent
+    : selected
+      ? c.accent
+      : isHighPriority
+        ? c.red
+        : region.active
+          ? c.borderActive
+          : c.borderSilent
+
+  const glow = scanning
+    ? `0 0 12px ${c.accent}55`
+    : selected
+      ? `0 0 8px ${c.accent}33`
+      : isHighPriority
+        ? `0 0 6px ${c.red}33`
+        : "none"
 
   return (
     <div
-      className="relative p-2 rounded border transition-all duration-300 overflow-hidden"
+      className="relative p-3 rounded border transition-all duration-300 overflow-hidden"
       style={{
         background: bg,
         borderColor: border,
-        boxShadow: scanning
-          ? `0 0 10px ${c.accent}44`
-          : region.active && threat > 0.7
-            ? `0 0 6px ${c.red}33`
-            : "none",
+        boxShadow: glow,
+        borderWidth: scanning || selected ? "2px" : "1px",
       }}
     >
       {scanning && (
@@ -1040,40 +1212,52 @@ function RegionCell({
           }}
         />
       )}
+      {selected && (
+        <div
+          className="absolute top-1 right-1 w-1.5 h-1.5 rounded-full"
+          style={{ background: c.accent, boxShadow: `0 0 6px ${c.accent}` }}
+        />
+      )}
       <div className="flex justify-between items-start mb-1">
         <span
-          className="text-[11px] font-mono font-bold"
+          className="text-sm font-mono font-bold"
           style={{
             color: scanning
               ? c.accent
-              : region.active
-                ? c.textPrimary
-                : c.textDim,
+              : selected
+                ? c.accent
+                : region.active
+                  ? c.textPrimary
+                  : c.textDim,
           }}
         >
           {region.id}
         </span>
         <span
-          className="text-[9px] font-mono px-1 rounded"
+          className="text-[9px] font-mono px-1.5 py-0.5 rounded-sm font-bold tracking-wider border"
           style={{
             background: TYPE_COLOR[region.signalType] + "22",
             color: TYPE_COLOR[region.signalType],
+            borderColor: TYPE_COLOR[region.signalType] + "55",
           }}
         >
           {region.signalType}
         </span>
       </div>
-      <div className="text-[9px] font-mono mb-1" style={{ color: c.textMuted }}>
+      <div
+        className="text-[10px] font-mono mb-2"
+        style={{ color: scanning ? c.accent : c.textInfo }}
+      >
         {region.freqMHz} MHz
       </div>
-      <div className="space-y-0.5">
+      <div className="space-y-1">
         {[
           ["THR", region.threatLevel, threat > 0.7 ? c.red : c.yellow],
           ["UNC", region.uncertainty, c.purple],
         ].map(([lbl, val, col]) => (
-          <div key={lbl as string} className="flex items-center gap-1">
+          <div key={lbl as string} className="flex items-center gap-1.5">
             <div
-              className="w-10 h-1 rounded-full overflow-hidden"
+              className="w-12 h-1.5 rounded-full overflow-hidden"
               style={{ background: c.bgTrack }}
             >
               <div
@@ -1085,18 +1269,36 @@ function RegionCell({
               />
             </div>
             <span
-              className="text-[8px] font-mono"
-              style={{ color: c.textMuted }}
+              className="text-[9px] font-mono w-6"
+              style={{ color: col as string, fontWeight: 700 }}
             >
               {lbl}
+            </span>
+            <span
+              className="text-[9px] font-mono ml-auto"
+              style={{ color: c.textMuted }}
+            >
+              {(val as number).toFixed(2)}
             </span>
           </div>
         ))}
       </div>
+      {isHighPriority && (
+        <div
+          className="mt-1.5 text-[9px] font-mono font-bold tracking-wider text-center rounded-sm py-0.5 border"
+          style={{
+            background: c.red + "22",
+            color: c.red,
+            borderColor: c.red + "55",
+          }}
+        >
+          HIGH PRIORITY
+        </div>
+      )}
       {!region.active && (
-        <div className="absolute inset-0 flex items-center justify-center">
+        <div className="absolute inset-0 flex items-center justify-center bg-black/45">
           <span
-            className="text-[8px] font-mono"
+            className="text-[9px] font-mono font-bold tracking-widest"
             style={{ color: c.textSilent }}
           >
             SILENT
@@ -1164,6 +1366,210 @@ function CandidateRanking({
           </span>
         </div>
       ))}
+    </div>
+  )
+}
+
+function TimelineEvent({
+  rec,
+  isActive,
+  isLatest,
+  c,
+  t,
+}: {
+  rec: ScanRecord
+  isActive: boolean
+  isLatest: boolean
+  c: Palette
+  t: (k: TKey) => string
+}) {
+  const phase = rec.detectedSignal ? t("timelinePhaseScan") : t("timelinePhaseEvaluate")
+  const hit = rec.detectedSignal
+  const status = hit ? t("timelineHit") : t("timelineNil")
+  const statusColor = hit ? c.accent : c.textMuted
+
+  return (
+    <div
+      className="relative flex items-center gap-3 px-3 py-2.5 rounded-lg border transition-all duration-300"
+      style={{
+        background: isActive
+          ? c.bgActive
+          : isLatest
+            ? c.bgIntel
+            : c.bgDarkCard,
+        borderColor: isActive
+          ? c.accent
+          : isLatest
+            ? c.borderActive
+            : c.border,
+        boxShadow: isActive ? `0 0 12px ${c.accent}33` : "none",
+        minWidth: 0,
+      }}
+    >
+      <div className="flex flex-col items-center gap-1 shrink-0">
+        <div
+          className="w-2.5 h-2.5 rounded-full border-2"
+          style={{
+            borderColor: isActive ? c.accent : isLatest ? c.blue : c.borderActive,
+            background: isActive ? c.accent : "transparent",
+            boxShadow: isActive ? `0 0 8px ${c.accent}` : "none",
+          }}
+        />
+      </div>
+      <div className="flex flex-col gap-0.5 min-w-0 flex-1">
+        <div className="flex items-center gap-2 flex-wrap">
+          <span
+            className="mono text-sm font-bold"
+            style={{ color: isActive ? c.accent : c.textPrimary }}
+          >
+            {rec.regionId}
+          </span>
+          <span
+            className="mono text-[9px] px-1.5 py-0.5 rounded-sm font-bold tracking-wider border"
+            style={{
+              background: c.bgIntel,
+              color: c.textInfo,
+              borderColor: c.borderActive,
+            }}
+          >
+            {phase}
+          </span>
+        </div>
+        <div
+          className="mono text-[10px]"
+          style={{ color: c.textMuted }}
+        >
+          {t("timelineElapsed")} {formatT(rec.step * 1.2)} · {t("timelineEvent")} #{rec.step}
+        </div>
+        <div
+          className="mono text-[9px]"
+          style={{ color: c.textVeryDim }}
+        >
+          {rec.explanation}
+        </div>
+      </div>
+      <div className="flex flex-col items-end gap-1 shrink-0">
+        <span
+          className="mono text-[10px] font-bold px-2 py-0.5 rounded-sm border"
+          style={{
+            background: statusColor + "22",
+            color: statusColor,
+            borderColor: statusColor + "55",
+          }}
+        >
+          {status}
+        </span>
+        <span
+          className="mono text-[9px]"
+          style={{ color: c.textVeryDim }}
+        >
+          IG {(rec.infoGain ?? 0).toFixed(2)} · UNC {(rec.uncertainty ?? 0).toFixed(2)}
+        </span>
+      </div>
+    </div>
+  )
+}
+
+function HorizontalTimeline({
+  history,
+  step,
+  running,
+  c,
+  t,
+}: {
+  history: ScanRecord[]
+  step: number
+  running: boolean
+  c: Palette
+  t: (k: TKey) => string
+}) {
+  const latestIndex = history.length - 1
+
+  const phases = [
+    { key: "timelinePhaseObserve", label: t("timelinePhaseObserve"), icon: "◎" },
+    { key: "timelinePhaseEvaluate", label: t("timelinePhaseEvaluate"), icon: "◐" },
+    { key: "timelinePhaseDecide", label: t("timelinePhaseDecide"), icon: "◑" },
+    { key: "timelinePhaseScan", label: t("timelinePhaseScan"), icon: "◒" },
+    { key: "timelinePhaseUpdate", label: t("timelinePhaseUpdate"), icon: "◓" },
+  ]
+
+  return (
+    <div
+      className="border-t border-l-0 px-4 py-3 shrink-0"
+      style={{ borderColor: c.border, background: c.bgPanel }}
+    >
+      <div className="flex items-center justify-between mb-2">
+        <div className="flex items-center gap-2">
+          <span
+            className="mono text-[10px] tracking-widest font-bold"
+            style={{ color: c.textPrimary }}
+          >
+            {t("scanTimeline")}
+          </span>
+          <span
+            className="mono text-[9px] px-1.5 py-0.5 rounded-sm border"
+            style={{
+              background: running ? c.bgScanning : c.bgDarkCard,
+              color: running ? c.accent : c.textMuted,
+              borderColor: running ? c.borderActive : c.border,
+            }}
+          >
+            {running ? t("timelineActive") : t("timelineCompleted")}
+          </span>
+        </div>
+        <div className="flex items-center gap-3 text-[9px] mono">
+          <span style={{ color: c.textVeryDim }}>
+            {t("timelinePhase")}:{" "}
+            <span style={{ color: c.accent }}>
+              {phases.map((p) => p.label).join(" → ")}
+            </span>
+          </span>
+          <span style={{ color: c.textVeryDim }}>
+            {t("timelineRegion")} / {t("timelineHit")} / {t("timelineNil")}
+          </span>
+        </div>
+      </div>
+
+      {history.length === 0 ? (
+        <div
+          className="text-center py-6 mono text-[10px]"
+          style={{ color: c.textVeryDim }}
+        >
+          {t("awaiting")}
+        </div>
+      ) : (
+        <div className="relative">
+          <div
+            className="absolute top-1.5 left-3 right-3 h-0.5"
+            style={{ background: c.borderActive }}
+          />
+          <div
+            className="flex gap-3 overflow-x-auto pb-1"
+            style={{ scrollbarWidth: "thin", scrollbarColor: c.borderActive + " transparent" }}
+          >
+            {history.map((rec, i) => {
+              const isActive = i === latestIndex && running
+              const isLatest = i === latestIndex
+
+              return (
+                <div
+                  key={`${rec.step}-${i}`}
+                  className="flex flex-col items-center shrink-0"
+                  style={{ width: 220 }}
+                >
+                  <TimelineEvent
+                    rec={rec}
+                    isActive={isActive}
+                    isLatest={isLatest}
+                    c={c}
+                    t={t}
+                  />
+                </div>
+              )
+            })}
+          </div>
+        </div>
+      )}
     </div>
   )
 }
@@ -3903,34 +4309,38 @@ export default function App() {
                     {t("currentIntel")}
                   </span>
                   <div className="flex gap-2">
-                    <StatBadge
-                      label={t("detected")}
-                      value={detected}
-                      color={c.accent}
-                      bg={c.bgDarkCard}
-                      border={c.border}
-                    />
-                    <StatBadge
-                      label={t("highPriority")}
-                      value={highPriority}
-                      color={c.red}
-                      bg={c.bgDarkCard}
-                      border={c.border}
-                    />
-                    <StatBadge
-                      label={t("uncertain")}
-                      value={uncertain}
-                      color={c.purple}
-                      bg={c.bgDarkCard}
-                      border={c.border}
-                    />
-                    <StatBadge
-                      label={t("scanning")}
-                      value={scanningId ?? "—"}
-                      color={c.blue}
-                      bg={c.bgDarkCard}
-                      border={c.border}
-                    />
+<StatBadge
+                    label={t("detected")}
+                    value={detected}
+                    color={c.accent}
+                    bg={c.bgDarkCard}
+                    border={c.border}
+                    c={c}
+                  />
+                  <StatBadge
+                    label={t("highPriority")}
+                    value={highPriority}
+                    color={c.red}
+                    bg={c.bgDarkCard}
+                    border={c.border}
+                    c={c}
+                  />
+                  <StatBadge
+                    label={t("uncertain")}
+                    value={uncertain}
+                    color={c.purple}
+                    bg={c.bgDarkCard}
+                    border={c.border}
+                    c={c}
+                  />
+                  <StatBadge
+                    label={t("scanning")}
+                    value={scanningId ?? "—"}
+                    color={c.blue}
+                    bg={c.bgDarkCard}
+                    border={c.border}
+                    c={c}
+                  />
                   </div>
                   <span
                     className="mono text-[9px] ml-auto"
@@ -3945,12 +4355,12 @@ export default function App() {
                 <div className="flex-1 overflow-y-auto p-4">
                   <div className="flex items-center justify-between mb-3">
                     <span
-                      className="mono text-[9px] tracking-widest"
-                      style={{ color: c.textMuted }}
+                      className="mono text-[11px] tracking-widest font-bold"
+                      style={{ color: c.textPrimary }}
                     >
                       {t("spectrumEnv")}
                     </span>
-                    <div className="flex gap-2 text-[9px] mono">
+                    <div className="flex gap-2 text-[10px] mono">
                       {[
                         ["RADAR", "#f87171"],
                         ["COMM", "#38bdf8"],
@@ -3959,7 +4369,7 @@ export default function App() {
                       ].map(([tp, col]) => (
                         <span key={tp} className="flex items-center gap-1">
                           <span
-                            className="w-1.5 h-1.5 rounded-full inline-block"
+                            className="w-2 h-2 rounded-full inline-block"
                             style={{ background: col }}
                           />
                           <span style={{ color: c.textMuted }}>{tp}</span>
@@ -3971,7 +4381,7 @@ export default function App() {
                     className="grid gap-2"
                     style={{
                       gridTemplateColumns:
-                        "repeat(auto-fill, minmax(108px, 1fr))",
+                        "repeat(auto-fill, minmax(120px, 1fr))",
                     }}
                   >
                     {regions.map((r) => (
@@ -3979,118 +4389,107 @@ export default function App() {
                         key={r.id}
                         region={r}
                         scanning={scanningId === r.id}
+                        selected={candidates[0]?.id === r.id}
                         c={c}
                       />
                     ))}
                   </div>
-                  <div className="mt-4">
-                    <span
-                      className="mono text-[9px] tracking-widest block mb-2"
-                      style={{ color: c.textMuted }}
-                    >
-                      {t("beliefState")}
-                    </span>
-                    <div className="grid grid-cols-2 gap-x-6 gap-y-1.5">
-                      {regions.map((r) => (
-                        <div
-                          key={r.id}
-                          className="flex items-center gap-2 text-[9px] mono"
-                        >
-                          <span className="w-5" style={{ color: c.textMuted }}>
-                            {r.id}
-                          </span>
+                  <div className="mt-5">
+                    <div className="flex items-center justify-between mb-2">
+                      <span
+                        className="mono text-[11px] tracking-widest font-bold"
+                        style={{ color: c.textPrimary }}
+                      >
+                        {t("beliefState")}
+                      </span>
+                      <span
+                        className="mono text-[9px]"
+                        style={{ color: c.textVeryDim }}
+                      >
+                        SIGNAL EXISTENCE PROBABILITY
+                      </span>
+                    </div>
+                    <div className="grid grid-cols-2 gap-x-8 gap-y-2">
+                      {regions.map((r) => {
+                        const status = getRegionStatus(r)
+                        const statusColor = getStatusColor(status, c)
+                        const isHighPriority =
+                          r.threatLevel > 0.7 && r.beliefProb > 0.5
+
+                        return (
                           <div
-                            className="flex-1 h-1.5 rounded-full overflow-hidden"
-                            style={{ background: c.bgTrack }}
+                            key={r.id}
+                            className="flex items-center gap-2 text-[10px] mono"
                           >
-                            <div
-                              className="h-full rounded-full transition-all duration-700"
+                            <span
+                              className="w-6 font-bold"
                               style={{
-                                width: `${r.beliefProb * 100}%`,
-                                background:
-                                  r.beliefProb > 0.7
+                                color:
+                                  candidates[0]?.id === r.id
                                     ? c.accent
-                                    : r.beliefProb > 0.4
-                                      ? c.yellow
-                                      : c.textMuted,
+                                    : c.textMuted,
                               }}
-                            />
+                            >
+                              {r.id}
+                            </span>
+                            <div
+                              className="flex-1 h-2 rounded-full overflow-hidden"
+                              style={{ background: c.bgTrack }}
+                            >
+                              <div
+                                className="h-full rounded-full transition-all duration-700"
+                                style={{
+                                  width: `${r.beliefProb * 100}%`,
+                                  background:
+                                    r.beliefProb > 0.7
+                                      ? c.accent
+                                      : r.beliefProb > 0.4
+                                        ? c.yellow
+                                        : c.textMuted,
+                                }}
+                              />
+                            </div>
+                            <span
+                              className="w-10 text-right font-bold"
+                              style={{ color: c.textPrimary }}
+                            >
+                              {r.beliefProb.toFixed(2)}
+                            </span>
+                            <span
+                              className="mono text-[9px] px-1.5 py-0.5 rounded-sm font-bold tracking-wider border"
+                              style={{
+                                background: statusColor + "22",
+                                color: statusColor,
+                                borderColor: statusColor + "55",
+                              }}
+                            >
+                              {status}
+                            </span>
+                            {isHighPriority && (
+                              <span
+                                className="mono text-[8px] px-1 py-0.5 rounded-sm font-bold"
+                                style={{
+                                  background: c.red + "22",
+                                  color: c.red,
+                                }}
+                              >
+                                PRI
+                              </span>
+                            )}
                           </div>
-                          <span
-                            className="w-7 text-right"
-                            style={{ color: c.textMuted }}
-                          >
-                            {r.beliefProb.toFixed(2)}
-                          </span>
-                          <StatusChip status={getRegionStatus(r)} c={c} />
-                        </div>
-                      ))}
+                        )
+                      })}
                     </div>
                   </div>
                 </div>
-              </div>
 
-              {/* Scan Timeline column */}
-              <div
-                className="w-48 border-l flex flex-col shrink-0"
-                style={{ borderColor: c.border }}
-              >
-                <div
-                  className="px-3 py-2 border-b"
-                  style={{ borderColor: c.border }}
-                >
-                  <span
-                    className="mono text-[9px] tracking-widest"
-                    style={{ color: c.textMuted }}
-                  >
-                    {t("scanTimeline")}
-                  </span>
-                </div>
-                <div className="flex-1 overflow-y-auto p-2 space-y-1">
-                  {history.length === 0 && (
-                    <div
-                      className="text-[9px] mono text-center pt-4"
-                      style={{ color: c.textVeryDim }}
-                    >
-                      {t("awaiting")}
-                    </div>
-                  )}
-                  {history.map((rec, i) => (
-                    <div
-                      key={`${rec.step}-${i}`}
-                      className="flex items-center gap-1.5 px-2 py-1.5 rounded text-[9px] mono"
-                      style={{
-                        background: i === 0 ? c.bgActive : "transparent",
-                        borderLeft: `2px solid ${
-                          rec.detectedSignal ? c.accent : c.border
-                        }`,
-                      }}
-                    >
-                      <span
-                        className="w-5 shrink-0"
-                        style={{ color: c.textVeryDim }}
-                      >
-                        #{rec.step}
-                      </span>
-                      <span
-                        className="font-bold"
-                        style={{
-                          color: rec.detectedSignal ? c.accent : c.textMuted,
-                        }}
-                      >
-                        {rec.regionId}
-                      </span>
-                      <span
-                        className="ml-auto"
-                        style={{
-                          color: rec.detectedSignal ? c.accent : c.textVeryDim,
-                        }}
-                      >
-                        {rec.detectedSignal ? "HIT" : "NIL"}
-                      </span>
-                    </div>
-                  ))}
-                </div>
+                <HorizontalTimeline
+                  history={history}
+                  step={step}
+                  running={running}
+                  c={c}
+                  t={t}
+                />
               </div>
             </div>
 
