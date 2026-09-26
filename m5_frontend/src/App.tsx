@@ -2882,13 +2882,13 @@ function BenchmarksPage({ history, c }: { history: ScanRecord[] c: Palette }) {
     <div className="flex-1 overflow-auto p-5 space-y-6">
       <div>
         <div
-          className="mono text-xs font-bold tracking-widest"
+          className="mono text-sm font-bold tracking-widest"
           style={{ color: c.textMuted }}
         >
           STRATEGY BENCHMARKS
         </div>
         <div
-          className="mono text-[9px] mt-0.5"
+          className="mono text-[11px] mt-0.5"
           style={{ color: c.textVeryDim }}
         >
           ADAPT-SCAN vs baseline strategies
@@ -2903,7 +2903,7 @@ function BenchmarksPage({ history, c }: { history: ScanRecord[] c: Palette }) {
           <div key={strat}>
             <div className="flex items-center gap-2 mb-1.5">
               <span
-                className="mono text-[10px] w-32 shrink-0 font-bold"
+                className="mono text-[12px] w-36 shrink-0 font-bold"
                 style={{
                   color: strat === "ADAPT_SCAN" ? c.accent : c.textMuted,
                 }}
@@ -2911,11 +2911,11 @@ function BenchmarksPage({ history, c }: { history: ScanRecord[] c: Palette }) {
                 {strat === "ADAPT_SCAN" && "▶ "}
                 {strat.replace("_", "-")}
               </span>
-              <div className="flex gap-1.5 flex-1">
+              <div className="flex gap-2 flex-1">
                 {cols.map((col) => (
                   <div
                     key={col.key}
-                    className="flex-1 h-4 rounded-sm overflow-hidden"
+                    className="flex-1 h-5 rounded-sm overflow-hidden"
                     style={{ background: c.bgTrack }}
                   >
                     <div
@@ -2936,13 +2936,13 @@ function BenchmarksPage({ history, c }: { history: ScanRecord[] c: Palette }) {
           {cols.map((col) => (
             <div
               key={col.key}
-              className="flex items-center gap-1 text-[9px] mono"
+              className="flex items-center gap-1 text-[11px] mono"
             >
               <div
-                className="w-2 h-2 rounded-sm"
+                className="w-2.5 h-2.5 rounded-sm"
                 style={{ background: col.color }}
               />
-              <span style={{ color: c.textMuted }}>{col.label}</span>
+              <span style={{ color: col.color }}>{col.label}</span>
             </div>
           ))}
         </div>
@@ -2959,32 +2959,32 @@ function BenchmarksPage({ history, c }: { history: ScanRecord[] c: Palette }) {
             }}
           >
             <div
-              className="mono text-[10px] font-bold mb-2"
+              className="mono text-[12px] font-bold mb-2"
               style={{ color: strat === "ADAPT_SCAN" ? c.accent : c.textMuted }}
             >
               {strat.replace("_", "-")}
             </div>
-            <div className="space-y-1 text-[9px] mono">
+            <div className="space-y-1.5 text-[11px] mono">
               <div className="flex justify-between">
-                <span style={{ color: c.textMuted }}>Detection Rate</span>
+                <span style={{ color: c.accent }}>Detection Rate</span>
                 <span style={{ color: c.accent }}>
                   {Math.round(metrics[strat].detRate * 100)}%
                 </span>
               </div>
               <div className="flex justify-between">
-                <span style={{ color: c.textMuted }}>Info Gain</span>
+                <span style={{ color: c.blue }}>Info Gain</span>
                 <span style={{ color: c.blue }}>
                   {metrics[strat].infoGain.toFixed(2)}
                 </span>
               </div>
               <div className="flex justify-between">
-                <span style={{ color: c.textMuted }}>Efficiency</span>
+                <span style={{ color: c.purple }}>Efficiency</span>
                 <span style={{ color: c.purple }}>
                   {Math.round(metrics[strat].efficiency * 100)}%
                 </span>
               </div>
               <div className="flex justify-between">
-                <span style={{ color: c.textMuted }}>Time-to-Detect</span>
+                <span style={{ color: c.yellow }}>Time-to-Detect</span>
                 <span style={{ color: c.yellow }}>
                   {metrics[strat].ttd}s avg
                 </span>
