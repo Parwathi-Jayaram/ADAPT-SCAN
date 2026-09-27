@@ -1097,7 +1097,7 @@ function Bar({
             style={{ width: `${value * 100}%`, background: color }}
           />
         </div>
-        <span className="w-8 text-right text-[10px]" style={{ color }}>
+        <span className="w-8 text-right text-[12px]" style={{ color }}>
           {value.toFixed(2)}
         </span>
       </div>
@@ -1697,12 +1697,12 @@ function DecisionPanel({
               boxShadow: running ? `0 0 6px ${c.accent}` : "none",
             }}
           />
-          <span
-            className="mono text-[10px] tracking-widest font-bold"
-            style={{ color: c.textMuted }}
-          >
-            {t("whyScan")}
-          </span>
+<span
+                className="mono text-[12px] tracking-widest font-bold"
+                style={{ color: c.textMuted }}
+              >
+                {t("whyScan")}
+              </span>
         </div>
         {currentRecord && (
           <span className="mono text-xs font-bold" style={{ color: c.accent }}>
